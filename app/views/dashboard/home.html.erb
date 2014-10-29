@@ -1,19 +1,286 @@
 <div class="container-fluid">
 	<div class="row">
-		
-		<div class="col-md-4">
-			<input></input>
-		</div>
-		
-		<div class="col-md-8">
+
+		<div class="col-md-6 col-md-offset-6">
+
 			<div class="pull-right">
 				<% if user_signed_in? %>
 					Logged in as <strong><%= current_user.email %></strong>
+					<%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'  %> |
+					<%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
 				<% else %>
-					<h1>Unsuccessful Login</h1>
+					<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+					<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
 				<% end %>
 			</div>
+
+		</div>
+
+	</div>
+
+	<div class="row margin-l">
+		<div class="col-md-4">
+			
+			<input></input>
+			
+			<h1>All Tasks</h1>
+			<table>
+				
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Priority</th>
+						<th>Deadline</th>
+						<th>Comment</th>
+						<th></th>
+					</tr>
+				</thead>
+				
+				<tbody class="tasksTable">
+					<% @tasks.each do |task| %>
+					<tr>
+						
+						<td><%= task.name %></td>
+						<td><%= task.priority %></td>
+						<td><%= task.deadline %></td>
+						<td><%= task.comment %></td>
+						
+						<td>
+							<a rel="popover" href="#" tabindex="0" class="btn btn-default"
+							data-toggle="popover" data-trigger="focus">Edit Task</a>
+							
+							<div class="head hide"></div>
+							<div class="content hide">
+								<%= form_for task do |f| %>
+									<%= render partial: 'tasks/form', :locals => { f: f } %>
+									<p><%= f.submit %></p>
+								<% end %>
+							</div>
+						</td>
+						
+						<td><%= link_to 'Destroy', task_path(task), method: :delete %></td>
+						
+					</tr>
+					<% end %>
+				</tbody>
+				
+			</table>
+			
+			<h1>All Categories</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @categories.each do |category| %>
+					<tr>
+						<td><%= category.name %></td>
+					</tr>
+					<% end %>
+				</tbody>
+			</table>
+						
+		</div>
+		
+		<!-- Middle -->
+
+		<div class="col-md-6">
+			
+			<div id="graph"></div>
+
+		</div>
+		
+		
+		<!-- Right Sidebar -->
+		
+
+		<div class="col-md-2 text-center">
+			<div class="margin-l">
+
+				<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Add Task</button>
+
+				<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">
+
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title">New Task</h4>
+							</div>
+							
+							<%= form_for :task, url: tasks_path do |f| %>
+							
+								<div class="modal-body">
+									
+									<p><%= f.label :name %><br><%= f.text_field :name %></p>
+									<p><%= f.label :priority %><br><%= f.text_area :priority %></p>
+									<p><%= f.label :deadline %><br><%= f.date_field :deadline %></p>
+	
+									<!-- <p>
+										<%= f.submit %>
+									</p> -->
+								</div>
+	
+								<div class="modal-footer">
+									
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									<%= button_tag(type: 'submit', class: "btn btn-primary") do %>Save<% end %>
+									
+								</div>
+							
+							<% end %>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="margin-l">
+					<button type="button" class="btn btn-default">Filter</button>
+				</div>
+
+				<div class="margin-l">
+					<button type="button" class="btn btn-default">Category</button>
+				</div>
+
+				<div class="margin-l">
+					<button type="button" class="btn btn-default">Later View</button>
+				</div>
+
+			</div>
+
 		</div>
 		
 	</div>
-</div>
+
+	<script type="text/javascript">
+	
+		// Try adding, removing, *reordering*, or changing values
+		// var tasks2 = [
+		    // {id: 1, type: "work", title: "Do this thing", due: new Date(2014, 10, 3)},
+		    // {id: 2, type: "home", title: "Do something else", due: new Date(2014, 9, 5)},
+		    // {id: 3, type: "home", title: "Do something else 2", due: new Date(2014, 10, 5)}
+		// ];
+		
+		var tasks = <%= @tasks.to_json.html_safe %>;
+		
+		// I thought this was built in? My console seems to have a date.diff function.
+		var daysUntil = function (date) {
+		    var today = new Date();
+		    return Math.floor((date.valueOf() - today.valueOf()) / (1000 * 3600 * 24));
+		};
+		
+		var taskPosition = function (task) {
+		    var diff = daysUntil(new Date(task.deadline));
+		     
+		    switch (task.priority) {
+		        case 1:
+		            return [200 - (diff * 3), 100];
+		            break;
+		        case 2:
+		            return [200 - (diff * 3), 200];
+		            break;
+		        case 3:
+		            return [200 - (diff * 3), 300];
+		            break;
+		    };
+		};
+		
+		var sampleSVG = d3.select("#graph")
+		        .append("svg")
+		        .attr("width", 500)
+		        .attr("height", 500);
+		
+		var div = d3.select("body").append("div")
+		    .attr("class", "tooltip")
+		    .style("opacity", 0);
+		
+		sampleSVG
+		    .selectAll("circle")
+		    .data(tasks)
+		    .enter()
+		    .append("circle")
+		    .style("stroke", "gray")
+		    .style("fill", "white")
+		    .attr("height", 40)
+		    .attr("width", 75)
+		    .attr("r", 10)
+		    .attr("cx", function (task) { return taskPosition(task)[0] })
+		    .attr("cy", function (task) { return taskPosition(task)[1] })
+		
+		    .on("mouseover", function (task) {
+		        div.transition()
+		            .duration(200)
+		            .style("opacity", .9)
+		        div.html(task.name)
+		           .style("left", (d3.event.pageX) + "px")
+		           .style("top", (d3.event.pageY - 28) + "px");
+		     })
+		     
+		    .on("mouseout", function (task) {
+		        div.transition()
+		           .duration(500)
+		           .style("opacity", 0);
+		    });
+		    
+	</script>
+	
+	<script type="text/javascript">
+		var width = 960, height = 500, radius = Math.min(width, height) / 2;
+
+		var color = d3.scale.ordinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+		var arc = d3.svg.arc().outerRadius(radius - 10).innerRadius(0);
+
+		var pie = d3.layout.pie().sort(null).value(function(d) {
+			return d.population;
+		});
+
+		var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+		d3.csv("data.csv", function(error, data) {
+
+			data.forEach(function(d) {
+				d.population = +d.population;
+			});
+
+			var g = svg.selectAll(".arc").data(pie(data)).enter().append("g").attr("class", "arc");
+
+			g.append("path").attr("d", arc).style("fill", function(d) {
+				return color(d.data.age);
+			});
+
+			g.append("text").attr("transform", function(d) {
+				return "translate(" + arc.centroid(d) + ")";
+			}).attr("dy", ".35em").style("text-anchor", "middle").text(function(d) {
+				return d.data.age;
+			});
+
+		});
+	</script>
+	
+	<script>
+		$('body').popover({
+			html : true,
+			selector : '[rel=popover]',
+			title : function() {
+				return $(this).parent().find('.head').html();
+			},
+			content : function() {
+				return $(this).parent().find('.content').html();
+			},
+			animation : true,
+			container : 'body',			
+			placement : 'right'
+				});
+
+			$('body').on('click', function(e) {
+				//did not click a popover toggle or popover
+				if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) {
+					$('.popover').popover('hide');
+				}
+			});
+	</script>

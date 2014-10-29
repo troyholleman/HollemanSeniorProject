@@ -5,7 +5,7 @@ html {
 
 .margin-s {}
 .margin-m {}
-.margin-l {}
+.margin-l {margin: 5% 0;}
 .margin-xl {}
 
 .padding-s {}

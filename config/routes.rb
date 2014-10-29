@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
   
-  devise_for :users
+  get 'info/find_tasks'
+
+  # get 'categories/new'
+  # get 'category/index'
+
   root 'dashboard#home'
-  
-  get '/dashboard' => 'dashboard#home'
+
+  devise_for :users
+  resources :tasks
+  resources :categories
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
