@@ -1,7 +1,6 @@
 class Task < ActiveRecord::Base
   
-  belongs_to :user
   belongs_to :category
+  # has_one :user, :through => :category
   
-  # =attr_accessible :name, :priority, :deadline, :comment
 end

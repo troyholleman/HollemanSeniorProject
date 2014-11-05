@@ -48,6 +48,11 @@ GEM
       warden (~> 1.2.3)
     erubis (2.7.0)
     execjs (2.2.1)
+    gon (5.2.3)
+      actionpack (>= 2.3.0)
+      json
+      multi_json
+      request_store (>= 1.0.5)
     hike (1.2.3)
     hirb (0.7.2)
     i18n (0.6.11)
@@ -85,6 +90,7 @@ GEM
     rake (10.3.2)
     rdoc (4.1.2)
       json (~> 1.4)
+    request_store (1.1.0)
     responders (1.1.1)
       railties (>= 3.2, < 4.2)
     sass (3.2.19)
@@ -127,6 +133,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   d3js-rails (~> 3.1.6)
   devise
+  gon
   hirb
   jbuilder (~> 2.0)
   jquery-rails

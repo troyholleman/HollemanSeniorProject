@@ -1,6 +1,6 @@
 class Category < ActiveRecord::Base
   
-  has_many :tasks
-  belongs_to :user
+  belongs_to :user, counter_cache: true
+  has_many :tasks, :dependent => :destroy
   
 end

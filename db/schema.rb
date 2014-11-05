@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20141017002608) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -24,6 +25,8 @@ ActiveRecord::Schema.define(version: 20141017002608) do
     t.integer  "priority"
     t.date     "deadline"
     t.text     "comment"
+    t.integer  "category_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

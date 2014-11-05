@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  
-  get 'info/find_tasks'
 
   # get 'categories/new'
   # get 'category/index'

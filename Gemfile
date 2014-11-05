@@ -31,6 +31,7 @@ gem 'spring',        group: :development
 gem 'devise'
 gem 'd3js-rails', '~> 3.1.6'
 gem 'hirb'
+gem 'gon'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

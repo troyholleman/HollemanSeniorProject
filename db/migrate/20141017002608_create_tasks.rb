@@ -5,6 +5,9 @@ class CreateTasks < ActiveRecord::Migration
       t.integer :priority
       t.date :deadline
       t.text :comment
+      
+      t.belongs_to :category
+      t.belongs_to :user
 
       t.timestamps
     end

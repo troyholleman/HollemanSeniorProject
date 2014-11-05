@@ -21,9 +21,10 @@ circle { stroke-width:1px; vector-effect:non-scaling-stroke }
 div.tooltip {   
   position: absolute;           
   text-align: center;           
-  padding: 20px;             
-  font: 12px sans-serif;     
-  background: lightsteelblue;   
+  padding: 10px;             
+  font: 12px sans-serif;   
+  color: white;  
+  background: steelblue;   
   border: 0px;      
   border-radius: 8px;           
   pointer-events: none;         

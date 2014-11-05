@@ -46,19 +46,18 @@
 						<td><%= task.comment %></td>
 						
 						<td>
-							<a rel="popover" href="#" tabindex="0" class="btn btn-default"
-							data-toggle="popover" data-trigger="focus">Edit Task</a>
+							
+							<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="right">Edit</a>
 							
 							<div class="head hide"></div>
 							<div class="content hide">
 								<%= form_for task do |f| %>
 									<%= render partial: 'tasks/form', :locals => { f: f } %>
-									<p><%= f.submit %></p>
 								<% end %>
 							</div>
 						</td>
 						
-						<td><%= link_to 'Destroy', task_path(task), method: :delete %></td>
+						<td><%= button_to 'X', task_path(task), method: :delete %></td>
 						
 					</tr>
 					<% end %>
@@ -71,12 +70,14 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Number of Tasks</th>
 					</tr>
 				</thead>
 				<tbody>
 					<% @categories.each do |category| %>
 					<tr>
 						<td><%= category.name %></td>
+						<td><%= current_user.categories.count %></td>
 					</tr>
 					<% end %>
 				</tbody>
@@ -85,10 +86,14 @@
 		</div>
 		
 		<!-- Middle -->
+		
+		
 
 		<div class="col-md-6">
 			
 			<div id="graph"></div>
+			
+			<div id="graph2"></div>
 
 		</div>
 		
@@ -96,12 +101,25 @@
 		<!-- Right Sidebar -->
 		
 
-		<div class="col-md-2 text-center">
+		<div class="col-md-2 pull-right">
+			
+			<div class="margin-r">
+				
+				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="left">Create Task</a>
+				
+				<div class="head hide"></div>
+				<div class="content hide">
+					<%= form_for :task, url: { action: "create", controller: "tasks" } do |f| %>
+						<%= render partial: 'tasks/form', :locals => { f: f } %>
+					<% end %>
+				</div>
+				
+			</div>
+				
 			<div class="margin-l">
+				<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm2">Add Category</button>
 
-				<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Add Task</button>
-
-				<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+				<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-sm">
 						<div class="modal-content">
 
@@ -109,27 +127,20 @@
 								<button type="button" class="close" data-dismiss="modal">
 									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 								</button>
-								<h4 class="modal-title">New Task</h4>
+								<h4 class="modal-title">New Category</h4>
 							</div>
 							
-							<%= form_for :task, url: tasks_path do |f| %>
+							<%= form_for :category, url: categories_path do |f| %>
 							
 								<div class="modal-body">
 									
 									<p><%= f.label :name %><br><%= f.text_field :name %></p>
-									<p><%= f.label :priority %><br><%= f.text_area :priority %></p>
-									<p><%= f.label :deadline %><br><%= f.date_field :deadline %></p>
-	
-									<!-- <p>
-										<%= f.submit %>
-									</p> -->
+									
 								</div>
 	
 								<div class="modal-footer">
-									
 									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 									<%= button_tag(type: 'submit', class: "btn btn-primary") do %>Save<% end %>
-									
 								</div>
 							
 							<% end %>
@@ -155,132 +166,61 @@
 		</div>
 		
 	</div>
+</div>
 
-	<script type="text/javascript">
+<!------------ Task Visualization JS ------------>
+<%= javascript_include_tag "application" %>
+
+<!-------------- Category Visualization -------------->
+
+<script type="text/javascript">
+
+	var categories = <%= @categories.to_json.html_safe %>;
+
+	var width = 960,
+			height = 500,
+			radius = Math.min(width, height) / 2;
+
+	var color = d3.scale.ordinal()
+			.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+	var arc = d3.svg.arc()
+			.outerRadius(radius - 10)
+			.innerRadius(0);
+
+	var pie = d3.layout.pie()
+			.sort(null)
+			.value(
+				// return d.population;
+				return <%= @categories.size %>;
+			});
+
+	var svg = d3.select("#graph2").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+		.append("g")
+			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
 	
-		// Try adding, removing, *reordering*, or changing values
-		// var tasks2 = [
-		    // {id: 1, type: "work", title: "Do this thing", due: new Date(2014, 10, 3)},
-		    // {id: 2, type: "home", title: "Do something else", due: new Date(2014, 9, 5)},
-		    // {id: 3, type: "home", title: "Do something else 2", due: new Date(2014, 10, 5)}
-		// ];
-		
-		var tasks = <%= @tasks.to_json.html_safe %>;
-		
-		// I thought this was built in? My console seems to have a date.diff function.
-		var daysUntil = function (date) {
-		    var today = new Date();
-		    return Math.floor((date.valueOf() - today.valueOf()) / (1000 * 3600 * 24));
-		};
-		
-		var taskPosition = function (task) {
-		    var diff = daysUntil(new Date(task.deadline));
-		     
-		    switch (task.priority) {
-		        case 1:
-		            return [200 - (diff * 3), 100];
-		            break;
-		        case 2:
-		            return [200 - (diff * 3), 200];
-		            break;
-		        case 3:
-		            return [200 - (diff * 3), 300];
-		            break;
-		    };
-		};
-		
-		var sampleSVG = d3.select("#graph")
-		        .append("svg")
-		        .attr("width", 500)
-		        .attr("height", 500);
-		
-		var div = d3.select("body").append("div")
-		    .attr("class", "tooltip")
-		    .style("opacity", 0);
-		
-		sampleSVG
-		    .selectAll("circle")
-		    .data(tasks)
-		    .enter()
-		    .append("circle")
-		    .style("stroke", "gray")
-		    .style("fill", "white")
-		    .attr("height", 40)
-		    .attr("width", 75)
-		    .attr("r", 10)
-		    .attr("cx", function (task) { return taskPosition(task)[0] })
-		    .attr("cy", function (task) { return taskPosition(task)[1] })
-		
-		    .on("mouseover", function (task) {
-		        div.transition()
-		            .duration(200)
-		            .style("opacity", .9)
-		        div.html(task.name)
-		           .style("left", (d3.event.pageX) + "px")
-		           .style("top", (d3.event.pageY - 28) + "px");
-		     })
-		     
-		    .on("mouseout", function (task) {
-		        div.transition()
-		           .duration(500)
-		           .style("opacity", 0);
-		    });
-		    
-	</script>
+
+		var g = svg.selectAll(".arc")
+				// .data(pie(data))
+				.data(pie())
+			.enter()
+				.append("g")
+				.attr("class", "arc");
+
+		g.append("path")
+			.attr("d", arc)
+			// .style("fill", function (d) { return color(d.data.age); });
+			.style("fill", "#000");
+
+		g.append("text")
+			.attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")"; })
+			.attr("dy", ".35em")
+			.style("text-anchor", "middle")
+			.text(function (d) { return d.data.age; });
+			
+	});
 	
-	<script type="text/javascript">
-		var width = 960, height = 500, radius = Math.min(width, height) / 2;
-
-		var color = d3.scale.ordinal().range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-		var arc = d3.svg.arc().outerRadius(radius - 10).innerRadius(0);
-
-		var pie = d3.layout.pie().sort(null).value(function(d) {
-			return d.population;
-		});
-
-		var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-		d3.csv("data.csv", function(error, data) {
-
-			data.forEach(function(d) {
-				d.population = +d.population;
-			});
-
-			var g = svg.selectAll(".arc").data(pie(data)).enter().append("g").attr("class", "arc");
-
-			g.append("path").attr("d", arc).style("fill", function(d) {
-				return color(d.data.age);
-			});
-
-			g.append("text").attr("transform", function(d) {
-				return "translate(" + arc.centroid(d) + ")";
-			}).attr("dy", ".35em").style("text-anchor", "middle").text(function(d) {
-				return d.data.age;
-			});
-
-		});
-	</script>
-	
-	<script>
-		$('body').popover({
-			html : true,
-			selector : '[rel=popover]',
-			title : function() {
-				return $(this).parent().find('.head').html();
-			},
-			content : function() {
-				return $(this).parent().find('.content').html();
-			},
-			animation : true,
-			container : 'body',			
-			placement : 'right'
-				});
-
-			$('body').on('click', function(e) {
-				//did not click a popover toggle or popover
-				if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('.popover.in').length === 0) {
-					$('.popover').popover('hide');
-				}
-			});
-	</script>
+</script>
