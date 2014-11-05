@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body {
+  font-size: 1.5em;
+}
+
 .circle {
   border-radius: 50px;
   border: 2px solid grey;
@@ -16,7 +20,7 @@
 
 #graph svg { border: 1px solid black; }
 
-circle { stroke-width:1px; vector-effect:non-scaling-stroke }
+circle { stroke-width: 1px; vector-effect:non-scaling-stroke }
 
 div.tooltip {   
   position: absolute;           

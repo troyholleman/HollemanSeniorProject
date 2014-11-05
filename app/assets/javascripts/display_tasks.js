@@ -14,13 +14,13 @@
      
     switch (task.priority) {
       case 1:
-        return [200 - (diff * 3), 150];
+        return [300 - (diff * 3), 150];
         break;
       case 2:
-        return [200 - (diff * 3), 275];
+        return [300 - (diff * 3), 275];
         break;
       case 3:
-        return [200 - (diff * 3), 400];
+        return [300 - (diff * 3), 400];
         break;
     };
 	};
@@ -30,7 +30,7 @@
     .attr("width", 500)
     .attr("height", 500);
 	
-	var popup = d3.select("body").append("div")
+	var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 	
@@ -53,7 +53,7 @@
 	  	div.transition()
         .duration(200)
         .style("opacity", .9);
-      popup.html(task.name)
+      div.html(task.name)
 			 .style("left", (d3.event.pageX) + "px")
 			 .style("top", (d3.event.pageY - 28) + "px");
 	   })

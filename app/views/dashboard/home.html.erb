@@ -52,7 +52,7 @@
 							<div class="head hide"></div>
 							<div class="content hide">
 								<%= form_for task do |f| %>
-									<%= render partial: 'tasks/form', :locals => { f: f } %>
+									<%= render partial: 'tasks/taskform', :locals => { f: f } %>
 								<% end %>
 							</div>
 						</td>
@@ -70,14 +70,28 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Number of Tasks</th>
+						<th>Color</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<% @categories.each do |category| %>
 					<tr>
 						<td><%= category.name %></td>
-						<td><%= current_user.categories.count %></td>
+						<td><%= category.color %></td>
+						<td>
+							<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="right">Edit</a>
+							
+							<div class="head hide"></div>
+							<div class="content hide">
+								<%= form_for category do |f| %>
+									<%= render partial: 'categories/catform', :locals => { f: f } %>
+								<% end %>
+							</div>
+						</td>
+						
+						<td><%= button_to 'X', category_path(category), method: :delete %></td>
+							
 					</tr>
 					<% end %>
 				</tbody>
@@ -93,7 +107,7 @@
 			
 			<div id="graph"></div>
 			
-			<div id="graph2"></div>
+			<!-- <div id="graph2"></div> -->
 
 		</div>
 		
@@ -110,13 +124,27 @@
 				<div class="head hide"></div>
 				<div class="content hide">
 					<%= form_for :task, url: { action: "create", controller: "tasks" } do |f| %>
-						<%= render partial: 'tasks/form', :locals => { f: f } %>
+						<%= render partial: 'tasks/taskform', :locals => { f: f } %>
 					<% end %>
 				</div>
 				
 			</div>
 				
-			<div class="margin-l">
+			<div class="margin-r">
+				
+				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="left">Create Category</a>
+				
+				<div class="head hide"></div>
+				<div class="content hide">
+					
+					<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
+						<%= render partial: 'categories/catform', :locals => { f: f } %>
+					<% end %>
+					
+				</div>
+				
+				<!-- 
+				
 				<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm2">Add Category</button>
 
 				<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -146,8 +174,10 @@
 							<% end %>
 
 						</div>
-					</div>
+					</div>-->
 				</div>
+				
+				
 
 				<div class="margin-l">
 					<button type="button" class="btn btn-default">Filter</button>
@@ -168,59 +198,6 @@
 	</div>
 </div>
 
-<!------------ Task Visualization JS ------------>
+<!------------ Javascript ------------>
+
 <%= javascript_include_tag "application" %>
-
-<!-------------- Category Visualization -------------->
-
-<script type="text/javascript">
-
-	var categories = <%= @categories.to_json.html_safe %>;
-
-	var width = 960,
-			height = 500,
-			radius = Math.min(width, height) / 2;
-
-	var color = d3.scale.ordinal()
-			.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-	var arc = d3.svg.arc()
-			.outerRadius(radius - 10)
-			.innerRadius(0);
-
-	var pie = d3.layout.pie()
-			.sort(null)
-			.value(
-				// return d.population;
-				return <%= @categories.size %>;
-			});
-
-	var svg = d3.select("#graph2").append("svg")
-			.attr("width", width)
-			.attr("height", height)
-		.append("g")
-			.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-	
-
-		var g = svg.selectAll(".arc")
-				// .data(pie(data))
-				.data(pie())
-			.enter()
-				.append("g")
-				.attr("class", "arc");
-
-		g.append("path")
-			.attr("d", arc)
-			// .style("fill", function (d) { return color(d.data.age); });
-			.style("fill", "#000");
-
-		g.append("text")
-			.attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")"; })
-			.attr("dy", ".35em")
-			.style("text-anchor", "middle")
-			.text(function (d) { return d.data.age; });
-			
-	});
-	
-</script>

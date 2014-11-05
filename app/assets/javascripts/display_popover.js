@@ -18,3 +18,11 @@ $('body').on('click', function(e) {
 		$('.popover').popover('hide');
 	}
 });
+
+
+
+
+$('.colorpicker').colorpicker()
+	.on('changeColor', function(ev) {
+  	bodyStyle.backgroundColor = ev.color.toHex();
+});
