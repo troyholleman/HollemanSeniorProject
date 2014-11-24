@@ -17,9 +17,11 @@
 		</div>
 
 	</div>
+	
+	<!-- Left -->
 
 	<div class="row margin-l">
-		<div class="col-md-4">
+		<div class="col-md-6">
 			
 			<input></input>
 			
@@ -32,6 +34,8 @@
 						<th>Priority</th>
 						<th>Deadline</th>
 						<th>Comment</th>
+						<th>Category</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -45,10 +49,10 @@
 						<td><%= task.deadline %></td>
 						<td><%= task.comment %></td>
 						
+						<td><%= @categories.find(task.category_id).name %></td>
+						
 						<td>
-							
 							<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="right">Edit</a>
-							
 							<div class="head hide"></div>
 							<div class="content hide">
 								<%= form_for task do |f| %>
@@ -103,11 +107,11 @@
 		
 		
 
-		<div class="col-md-6">
+		<div class="col-md-5">
 			
 			<div id="graph"></div>
 			
-			<!-- <div id="graph2"></div> -->
+			<!-- ><div id="graph2"></div> -->
 
 		</div>
 		
@@ -115,11 +119,11 @@
 		<!-- Right Sidebar -->
 		
 
-		<div class="col-md-2 pull-right">
+		<div class="col-md-1 pull-right">
 			
 			<div class="margin-r">
 				
-				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="left">Create Task</a>
+				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left">Create Task</a>
 				
 				<div class="head hide"></div>
 				<div class="content hide">
@@ -132,7 +136,7 @@
 				
 			<div class="margin-r">
 				
-				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="left">Create Category</a>
+				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left">Create Category</a>
 				
 				<div class="head hide"></div>
 				<div class="content hide">

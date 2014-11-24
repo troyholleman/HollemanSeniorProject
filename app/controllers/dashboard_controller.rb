@@ -3,31 +3,35 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
   
   def home
+    
     @current_user = current_user
-    gon.clear
     
     @categories = @current_user.categories
-    @tasks = @current_user.tasks    
+    @tasks = @current_user.tasks
     # @users = User.all
     
-    @category_options = current_user.categories.map{|u| [ u.name, u.id ] }
+    @category_options = @categories.map{ |u| [ u.name, u.id ] }
     
     # -------- Javascript Variables ---------- #
     
+    gon.clear
+    
+    gon.current_user = @current_user
     gon.tasks = @tasks
     gon.categories = @categories
+    gon.cat_tasks = find_tasks_by_cat
     
     gon.users = @users
+  end
+  
+  def find_tasks_by_cat
+    @hash = {}
+    categories = @categories
+    categories.each do |c|
+      @hash[c.name] = c.tasks
+    end
     
-    # -------- Diagnostic Information ---------- #
-    
-    # gon.user_cat = @c_user.categories
-    # gon.user_task = @c_user.tasks
-    
-    # gon.category_options = @category_options
-    
-    # gon.c_user_cat = @categories.first.tasks
-    # gon.c_user_task = @c_user.tasks
+    @hash
   end
   
 end

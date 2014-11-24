@@ -7,13 +7,16 @@
 
 <!-- <div class="input-append color colorpicker"data-color="rgb(255, 146, 180)" data-color-format="rgb"> -->
 	
-<div class="input-append color" data-color="rgb(255, 146, 180)" data-color-format="rgb">
+<p>
 	<%= f.label :color %>
 	<br>
-	<%= f.text_field :color %>
-	<span class="add-on colorpicker">
-		<i style="background-color: rgb(255, 146, 180)"></i>
-	</span>
-</div>
+	<div><%= f.text_field :color, class: 'cp'  %></div>
+</p>
 
 <p><%= f.submit %></p>
+
+<script>
+	$('.cp').colorpicker().on('changeColor', function(ev) {
+	  	bodyStyle.backgroundColor = ev.color.toHex();
+		});
+</script>
