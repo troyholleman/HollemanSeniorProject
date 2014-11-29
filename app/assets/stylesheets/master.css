@@ -1,14 +1,56 @@
 
-html {
-	margin: 10px;
+/* ---------------- Global ------------------ */
+
+html { margin: 10px; }
+a { color: #666666; }
+
+/* ---------------- Spacing ------------------ */
+
+.inline { display: inline-block; }
+
+.full-width { width: 100%; }
+
+.circle {
+	border-radius: 50%;
+	width: 20px;
+	height: 20px;
 }
 
-.margin-s {}
-.margin-m {}
-.margin-l {margin: 5% 0;}
-.margin-xl {}
+/* ---------------- Margin ------------------ */
 
-.padding-s {}
-.padding-m {}
-.padding-l {}
-.padding-xl {}
+.v-margin-s { margin: 2% 0; }
+.v-margin-m { margin: 4% 0; }
+.v-margin-l { margin: 6% 0; }
+
+.h-margin-s { margin: 0 2%; }
+.h-margin-m { margin: 0 4%; }
+.h-margin-l { margin: 0 6%; }
+
+.margin-s { margin: 2%; }
+.margin-m { margin: 4%; }
+.margin-l { margin: 6%; }
+
+/* ---------------- Padding ------------------ */
+
+.v-padding-s { padding: 2% 0; }
+.v-padding-m { padding: 4% 0; }
+.v-padding-l { padding: 6% 0; }
+
+.h-padding-s { padding: 0 2%; }
+.h-padding-m { padding: 0 4%; }
+.h-padding-l { padding: 0 6%; }
+
+.padding-s { padding: 2%; }
+.padding-m { padding: 4%; }
+.padding-l { padding: 6%; }
+
+/* ---------------- Color ------------------ */
+
+.red { color: red; }
+
+/* ---------------- Font ------------------ */
+
+.left { text-align: left; }
+.center { text-align: center; }
+
+.bold { font-weight: bold; }

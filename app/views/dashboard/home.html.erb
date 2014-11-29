@@ -1,33 +1,153 @@
+<!-- CONTAINER -->
 <div class="container-fluid">
+	
+	<!-- LOGIN HEADER ROW -->
 	<div class="row">
-
-		<div class="col-md-6 col-md-offset-6">
-
+		<div class="col-md-6">
+			<h1>Wompello</h1>
+		</div>
+		
+		<div class="col-md-6">
 			<div class="pull-right">
 				<% if user_signed_in? %>
-					Logged in as <strong><%= current_user.email %></strong>
-					<%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'  %> |
-					<%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+				Logged in as <strong><%= current_user.email %></strong>
+				<%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'  %> |
+				<%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
 				<% else %>
-					<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
-					<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+				<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+				<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
 				<% end %>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	<!-- BODY ROW -->
+	<div class="row v-margin-m">
+		
+		
+		<!-- Left Third -->
+		<div class="col-md-4">
+
+			<input></input>
+
+			<div class="row">
+				<div class="col-md-6">
+					<h3><%= @tasks.length %> Tasks</h3>
+				</div>
+				<div class="col-md-6">
+					<h3>86&#37; On-Time</h3>
+				</div>
+			</div>
+
+			<hr />
+
+			<h4>Most Important Tasks</h4>
+			
+			<table class="h-margin-s">
+
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<% @tasks.each do |task| %>
+						<tr>
+							<td><div class="circle" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
+							<td><%= task.name %></td>
+							<td>
+								<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="right">
+									<i class="fa fa-pencil-square-o fa-2x"></i>
+								</a>
+								
+								<div class="head hide"></div>
+								<div class="content hide">
+									<%= form_for task do |f| %>
+									<%= render partial: 'tasks/taskform', :locals => { f: f } %>
+									<% end %>
+								</div>
+							</td>
+						</tr>
+					<% end %>
+				</tbody>
+
+			</table>
+
+			<hr />
+			
+			<h4>Recently Overdue</h4>
+
+		</div>
+		<!-- END Left Third -->
+		
+		
+		
+		<!-- Middle Third -->
+		<div class="col-md-7">
+			<div id="graph" class="center"></div>
+		</div>
+		<!-- END Middle Third -->
+		
+		
+		
+		<!-- Right Third -->
+		<div class="col-md-1">
+
+			<div>
+				<a rel="popover" tabindex="0" class="btn" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left"> <i class="fa fa-plus fa-3x"></i> </a>
+
+				<div class="head hide"></div>
+				<div class="content hide">
+					<%= form_for :task, url: { action: "create", controller: "tasks" } do |f| %>
+					<%= render partial: 'tasks/taskform', :locals => { f: f } %>
+					<% end %>
+				</div>
+			</div>
+
+			<div>
+				<a rel="popover" tabindex="0" class="btn <%= if @categories.length >= 6 then "disabled" end %>" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left"> <i class="fa fa-plus-square fa-3x"></i> </a>
+
+				<div class="head hide"></div>
+				<div class="content hide">
+					<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
+					<%= render partial: 'categories/catform', :locals => { f: f } %>
+					<% end %>
+				</div>
+			</div>
+
+			<div>
+				<a class="btn"> <i class="fa fa-filter fa-3x"></i> </a>
+			</div>
+
+			<div>
+				<a class="btn"> <i class="fa fa-folder fa-3x"></i> </a>
+			</div>
+
+			<div>
+				<a class="btn"> <i class="fa fa-refresh fa-3x"></i> </a>
 			</div>
 
 		</div>
+		<!-- END Right Third -->
 
 	</div>
+	<!-- END BODY ROW -->
 	
-	<!-- Left -->
-
-	<div class="row margin-l">
+	
+	<!-- TEST ROW -->
+	<div class="row v-margin-s">
+		
+		
 		<div class="col-md-6">
 			
-			<input></input>
+			<h3>All Tasks</h3>
 			
-			<h1>All Tasks</h1>
-			<table>
-				
+			<table class="data-table full-width">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -39,42 +159,49 @@
 						<th></th>
 					</tr>
 				</thead>
-				
-				<tbody class="tasksTable">
+				<tbody>
 					<% @tasks.each do |task| %>
 					<tr>
-						
+
 						<td><%= task.name %></td>
 						<td><%= task.priority %></td>
 						<td><%= task.deadline %></td>
 						<td><%= task.comment %></td>
-						
+
 						<td><%= @categories.find(task.category_id).name %></td>
-						
+
 						<td>
-							<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="right">Edit</a>
+							<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="top">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
+							
 							<div class="head hide"></div>
 							<div class="content hide">
 								<%= form_for task do |f| %>
-									<%= render partial: 'tasks/taskform', :locals => { f: f } %>
+								<%= render partial: 'tasks/taskform', :locals => { f: f } %>
 								<% end %>
 							</div>
 						</td>
-						
+
 						<td><%= button_to 'X', task_path(task), method: :delete %></td>
-						
+
 					</tr>
 					<% end %>
 				</tbody>
-				
 			</table>
 			
-			<h1>All Categories</h1>
-			<table>
+		</div>
+		
+		<div class="col-md-6">
+			
+			<h3>All Categories</h3>
+			
+			<table class="data-table full-width">
 				<thead>
 					<tr>
 						<th>Name</th>
 						<th>Color</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -82,125 +209,33 @@
 					<% @categories.each do |category| %>
 					<tr>
 						<td><%= category.name %></td>
-						<td><%= category.color %></td>
+						<td><div class="circle" style="background-color: <%= category.color %>;"></div></td>
 						<td>
-							<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-original-title="popover" data-trigger="focus" data-placement="right">Edit</a>
+							<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="top">
+								<i class="fa fa-pencil-square-o fa-2x"></i>
+							</a>
 							
-							<div class="head hide"></div>
 							<div class="content hide">
 								<%= form_for category do |f| %>
-									<%= render partial: 'categories/catform', :locals => { f: f } %>
+								<%= render partial: 'categories/catform', :locals => { f: f } %>
 								<% end %>
 							</div>
 						</td>
-						
+
 						<td><%= button_to 'X', category_path(category), method: :delete %></td>
-							
+
 					</tr>
 					<% end %>
 				</tbody>
 			</table>
-						
-		</div>
-		
-		<!-- Middle -->
-		
-		
-
-		<div class="col-md-5">
 			
-			<div id="graph"></div>
-			
-			<!-- ><div id="graph2"></div> -->
-
-		</div>
-		
-		
-		<!-- Right Sidebar -->
-		
-
-		<div class="col-md-1 pull-right">
-			
-			<div class="margin-r">
-				
-				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left">Create Task</a>
-				
-				<div class="head hide"></div>
-				<div class="content hide">
-					<%= form_for :task, url: { action: "create", controller: "tasks" } do |f| %>
-						<%= render partial: 'tasks/taskform', :locals => { f: f } %>
-					<% end %>
-				</div>
-				
-			</div>
-				
-			<div class="margin-r">
-				
-				<a rel="popover" href="#" tabindex="0" class="btn btn-default" data-toggle="popover" data-original-title="popover" data-trigger="focus" data-placement="left">Create Category</a>
-				
-				<div class="head hide"></div>
-				<div class="content hide">
-					
-					<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
-						<%= render partial: 'categories/catform', :locals => { f: f } %>
-					<% end %>
-					
-				</div>
-				
-				<!-- 
-				
-				<button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm2">Add Category</button>
-
-				<div class="modal fade bs-example-modal-sm2" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-sm">
-						<div class="modal-content">
-
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal">
-									<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-								</button>
-								<h4 class="modal-title">New Category</h4>
-							</div>
-							
-							<%= form_for :category, url: categories_path do |f| %>
-							
-								<div class="modal-body">
-									
-									<p><%= f.label :name %><br><%= f.text_field :name %></p>
-									
-								</div>
-	
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-									<%= button_tag(type: 'submit', class: "btn btn-primary") do %>Save<% end %>
-								</div>
-							
-							<% end %>
-
-						</div>
-					</div>-->
-				</div>
-				
-				
-
-				<div class="margin-l">
-					<button type="button" class="btn btn-default">Filter</button>
-				</div>
-
-				<div class="margin-l">
-					<button type="button" class="btn btn-default">Category</button>
-				</div>
-
-				<div class="margin-l">
-					<button type="button" class="btn btn-default">Later View</button>
-				</div>
-
-			</div>
-
 		</div>
 		
 	</div>
+	<!-- END TEST ROW -->
+
 </div>
+<!-- END CONTAINER -->
 
 <!------------ Javascript ------------>
 
