@@ -48,13 +48,13 @@
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
-				return 3;
+				return outerRadius / 3;
 				break;
 			case 2:
-				return 2;
+				return outerRadius / 1.75;
 				break;
 			case 3:
-				return 1;
+				return outerRadius / 1;
 				break;
 		};
 	};
@@ -94,7 +94,7 @@
 	
 	// -------- D3 Canvas -------- //
 	
-	var sampleSVG = d3.select("#graph")
+	var canvasSVG = d3.select("#graph")
 	  .append("svg")
 		  .attr("width", width)
 		  .attr("height", height);
@@ -107,58 +107,82 @@
 		.innerRadius(innerRadius)
 		.outerRadius(outerRadius);
 	  
-	var arcs = sampleSVG.selectAll("path")
+	var arcs = canvasSVG.selectAll("path")
 		.data(categories)
 		.enter()
 		.append("path")
 			.attr("d", arc
 		    .startAngle( function (cat) { return categories.indexOf(cat) * stepAngle; } ) //converting from degs to radians
-		    .endAngle( function (cat) { return (categories.indexOf(cat) + 1) * stepAngle; } )
+		    .endAngle( function (cat) { return (categories.indexOf(cat) ) * stepAngle; } )
 			)
-			.attr("stroke", function (cat) { return cat.color; })
-			.attr("stroke-width", 4)
+			// .attr("stroke", function (cat) { return cat.color; })
+			.attr("stroke", "#c2c2c2")
+			.attr("stroke-width", 2)
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
+			// .append("text")
+          // .attr("text-anchor", "middle") //center the text on it's origin
+          // .text(function(cat) { return cat.name; });
 	  
-	var center = sampleSVG.append('g')
-		.attr("class", "center-circle")
-		.append("circle")
-		  .attr("r", radius)
-		  .attr("cx", cx)
-		  .attr("cy", cy);
+	var center = canvasSVG.append("text")
+		  .attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
+		  .attr("text-anchor", "middle")
+		  .text("NOW");
+		  
+	var force = d3.layout.force()
+    .nodes(tasks)
+    .size([width, height])
+    .start();
+  
+  force.on("tick", function(e) {
+	  canvasSVG.selectAll("circle")
+      // .attr("cx", function(d) { return d.x; })
+      // .attr("cy", function(d) { return d.y; });
+      .attr("cx", function (task) {
+			  	return task.x +
+			  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+			  	Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
+			  	// * task.priority * (taskPosition(task) / 7);
+		  	})
+			  .attr("cy", function (task) {
+			  	return task.y + 
+			  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+			  	Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
+			  	// * task.priority * (taskPosition(task) / 7);
+		  	});
+	});
 	 
-	// var cat = sampleSVG.append('g')
+	// var cat = canvasSVG.append('g')
 		// .data(categories)
 		// .attr('cx', function(d, i) { return (width / 2) + Math.cos(startAngle + stepAngle * i) * outerRadius; })
 		// .attr('cy', function(d, i) { return (height / 2) + Math.cos(startAngle + stepAngle * i) * outerRadius; });
 	
-	function drawCircles(data) {
+	// function drawCircles(data) {
 		
-		var circles = sampleSVG.selectAll("g.circle")
-	  	.data(data);
+		var circles = canvasSVG.selectAll("circle")
+	  	.data(tasks);
 	  	
-	  	circles.enter()
-	  	.append('g')
-	  	.attr("class", "circle");
-	
-	  	circles.append("circle")
-			  .style("fill", function (task) { return fillColor(task); })
-		  	.style("stroke", function (task) { return getCategory(task).color; })
-			  
-			  .attr("r", radius)
-			  
-			  .attr("cx", function (task) {
-			  	return cx +
-			  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius / taskPriority(task); 	
-			  	// * task.priority * (taskPosition(task) / 7);
-		  	})
-			  .attr("cy", function (task) {
-			  	return cy + 
-			  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius / taskPriority(task);
-			  	// * task.priority * (taskPosition(task) / 7);
-		  	})
+	  	circles.enter()	
+		  	.append("circle")
+				  .style("fill", function (task) { return fillColor(task); })
+			  	.style("stroke", function (task) { return getCategory(task).color; })
+				  
+				  .attr("r", radius)
+				  .call(force.drag)
+				  
+				  // .attr("cx", function (task) {
+				  	// return cx +
+				  	// // Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+				  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
+				  	// // * task.priority * (taskPosition(task) / 7);
+			  	// })
+				  // .attr("cy", function (task) {
+				  	// return cy + 
+				  	// // Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+				  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
+				  	// // * task.priority * (taskPosition(task) / 7);
+			  	// })
+			  	//.attr("transform", "translate(" + Math.floor( Math.random() * 10 ) + ", " + Math.floor( Math.random() * 10 ) + ")")
 			
 		  .on("click", function (task) {
 		  	div.transition()
@@ -167,7 +191,7 @@
 		      .style("border-color", getCategory(task).color );
 		      
 		    div.html(
-		    	"<div class='padding-l'>" +
+		    	"<div class='task-info'>" +
 			    	"<h5 class='bold'>What you need to do:</h5>" +
 			    	"<p>" + task.name + "</p>" +
 			    	"<p class='inline bold'>Priority</p>" +
@@ -186,9 +210,9 @@
 		     .duration(500)
 		     .style("opacity", 0);
 		  });
-	}
+	// }
 	
-for (var t in cat_tasks) {
-	console.log(cat_tasks[t]);
-	drawCircles(cat_tasks[t]);
-}
+// for (var t in cat_tasks) {
+	// console.log(cat_tasks[t]);
+	// drawCircles(cat_tasks[t]);
+// }
