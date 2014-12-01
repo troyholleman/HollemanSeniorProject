@@ -17,3 +17,4 @@
 
 //= require bootstrap
 //= require bootstrap-colorpicker
+//= require d3
