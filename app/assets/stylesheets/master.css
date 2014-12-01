@@ -4,19 +4,23 @@
 html { margin: 10px; }
 body {
 	color: #5c5c5c;
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.5em;
 }
-a { color: #666666; }
+a { color: #5c5c5c; }
+
 
 /* ---------------- Spacing ------------------ */
 
 .inline { display: inline-block; }
 
 .full-width { width: 100%; }
+.three-quarter-width { width: 75%; }
 
 .circle {
 	border-radius: 50%;
-	width: 20px;
-	height: 20px;
+	width: 15px;
+	height: 15px;
 }
 
 /* ---------------- Margin ------------------ */
@@ -33,6 +37,10 @@ a { color: #666666; }
 .margin-m { margin: 4%; }
 .margin-l { margin: 6%; }
 
+.remove-margin { margin: 0 !important; }
+.remove-margin-l { margin-left: 0 !important; }
+.remove-margin-r { margin-right: 0 !important; }
+
 /* ---------------- Padding ------------------ */
 
 .v-padding-s { padding: 2% 0; }
@@ -47,13 +55,23 @@ a { color: #666666; }
 .padding-m { padding: 4%; }
 .padding-l { padding: 6%; }
 
+.remove-padding { padding: 0 !important; }
+.remove-padding-l { padding-left: 0 !important; }
+.remove-padding-r { padding-right: 0 !important; }
+
 /* ---------------- Color ------------------ */
 
 .red { color: red; }
+.green { color: green; }
+.blue { color: blue; }
+.orange { color: orange; }
 
 /* ---------------- Font ------------------ */
 
 .left { text-align: left; }
 .center { text-align: center; }
 
-.bold { font-weight: bold; }
+.light * { font-weight: 300 !important; }
+.normal * { font-weight: 400 !important; }
+.medium * { font-weight: 500 !important; }
+.bold * { font-weight: 700 !important; }

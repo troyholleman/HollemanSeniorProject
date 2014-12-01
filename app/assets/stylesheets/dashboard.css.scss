@@ -4,14 +4,15 @@
 
 // ----------------- CUSTOM CSS --------------->
 
-body { font-size: 1.5em; }
-
-table.data-table,
-table.data-table td,
-table.data-table th {
-  border: 1px solid gray;
-  padding: 0 5px;
+#table-wrapper {
+  position: relative;
+  max-height: 180px;
+  overflow: auto;
 }
+
+table.data-table { width: 100%; }
+  table.data-table td,
+  table.data-table th { padding: 5px 15px; }
 
 div.info-popup {
   position: absolute;
@@ -21,7 +22,7 @@ div.info-popup {
   background-color: white;
   border-width: 2px;
   border-style: solid;
-  color: gray;
+  color: #5c5c5c;
   border-radius: 50%;
   width: 200px;
   height: 200px;
@@ -32,19 +33,39 @@ div.info-popup {
   padding: 25px 10px 0 10px;
 }
 
+select.styled-select {
+   -webkit-appearance: button;
+   -webkit-border-radius: 0;
+   -webkit-user-select: none;
+   background-image: url("http://i62.tinypic.com/15xvbd5.png");
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   font-size: inherit;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 100%;
+}
+
+@media screen and (min-width: 770px) {
+  .control-group { border-left: 2px solid #c2c2c2; }
+  .control-group > .inline { margin: 50% 0; }
+}
+
+circle {
+  stroke-width: 2px;
+  vector-effect:non-scaling-stroke;
+}
+
 // ----------------- Overridden CSS --------------->
 
 .dropdown-menu {
   z-index: 1080 !important;
 }
 
-// ----------------- External CSS --------------->
-
-
-// #graph svg { border: 1px solid black; }
-
-circle { stroke-width: 2px; vector-effect:non-scaling-stroke }
-
-.arc path {
-  stroke: #fff;
+hr {
+  border-color: #c2c2c2;
+  border-width: 2px !important;
 }

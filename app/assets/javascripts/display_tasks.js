@@ -1,19 +1,17 @@
 	
-	// -------- VARIABLES -------- //
+	// ---------------- VARIABLES ---------------- //
 	
-	var tasks = gon.tasks;
+	var current_tasks = gon.current_tasks;
 	var categories = gon.categories;
-	var cat_tasks = gon.cat_tasks;
+	//var cat_tasks = gon.cat_tasks;
 	
-	var width = 500,
+	var width = 600,
 			height = 500,
 			
 			radius = 6,
 			radiusAll = 120,
-      maxRadius = radiusAll - 5,
       
-      startAngle = Math.PI * 1.7,
-      // startAngle = 0,
+      startAngle = Math.PI * 1.75,
       stepAngle = (2 * Math.PI) / categories.length,
       outerRadius = 2 * radiusAll,
       innerRadius = radiusAll / 4;
@@ -21,7 +19,7 @@
       cx = width / 2;
       cy = height / 2;
       
-  // -------- HELPER FUNCTIONS -------- //
+  // ---------------- HELPER FUNCTIONS ---------------- //
 	
 	var daysUntil = function (date) {
 	  var today = new Date();
@@ -51,10 +49,10 @@
 				return outerRadius / 3;
 				break;
 			case 2:
-				return outerRadius / 1.75;
+				return outerRadius / 1.5;
 				break;
 			case 3:
-				return outerRadius / 1;
+				return outerRadius - 0.5;
 				break;
 		};
 	};
@@ -92,7 +90,7 @@
 		}
 	};
 	
-	// -------- D3 Canvas -------- //
+	// ---------------- D3 Canvas ---------------- //
 	
 	var canvasSVG = d3.select("#graph")
 	  .append("svg")
@@ -124,32 +122,39 @@
           // .attr("text-anchor", "middle") //center the text on it's origin
           // .text(function(cat) { return cat.name; });
 	  
-	var center = canvasSVG.append("text")
-		  .attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
+	var center = canvasSVG.append("circle")
+			.attr("r", radius * 5)
+			.attr("stroke", "#c2c2c2")
+			.attr("stroke-width", 2)
+			.attr("fill", "none")
+			.attr("transform", "translate(" + cx + ", " + cy + ")");
+		
+	var centerText = canvasSVG.append("text")
 		  .attr("text-anchor", "middle")
+		  .attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
 		  .text("NOW");
 		  
 	var force = d3.layout.force()
-    .nodes(tasks)
+    .nodes(current_tasks)
     .size([width, height])
     .start();
   
-  force.on("tick", function(e) {
-	  canvasSVG.selectAll("circle")
+  force.on("tick", function (e) {
+	  canvasSVG.selectAll("circle.task")
       // .attr("cx", function(d) { return d.x; })
       // .attr("cy", function(d) { return d.y; });
       .attr("cx", function (task) {
-			  	return task.x +
-			  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
-			  	// * task.priority * (taskPosition(task) / 7);
-		  	})
-			  .attr("cy", function (task) {
-			  	return task.y + 
-			  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
-			  	// * task.priority * (taskPosition(task) / 7);
-		  	});
+		  	return task.x +
+		  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+		  	Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
+		  	// * task.priority * (taskPosition(task) / 7);
+	  	})
+		  .attr("cy", function (task) {
+		  	return task.y + 
+		  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+		  	Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
+		  	// * task.priority * (taskPosition(task) / 7);
+	  	});
 	});
 	 
 	// var cat = canvasSVG.append('g')
@@ -159,16 +164,18 @@
 	
 	// function drawCircles(data) {
 		
-		var circles = canvasSVG.selectAll("circle")
-	  	.data(tasks);
+		var circles = canvasSVG.selectAll("circle.task")
+	  	.data(current_tasks);
 	  	
-	  	circles.enter()	
-		  	.append("circle")
-				  .style("fill", function (task) { return fillColor(task); })
-			  	.style("stroke", function (task) { return getCategory(task).color; })
-				  
-				  .attr("r", radius)
-				  .call(force.drag)
+	  	circles.enter().append("circle")
+	  		.attr("class", "task")
+			  .style("fill", function (task) { return fillColor(task); })
+		  	.style("stroke", function (task) { return getCategory(task).color; })
+			  
+			  .attr("r", radius)
+			  .attr("cx", function (task) { return task.x; })
+			  .attr("cy", function (task) { return task.y; })
+			  .call(force.drag)
 				  
 				  // .attr("cx", function (task) {
 				  	// return cx +
@@ -196,9 +203,12 @@
 			    	"<p>" + task.name + "</p>" +
 			    	"<p class='inline bold'>Priority</p>" +
 			    	"<p class='inline'>" + ": " + task.priority + "</p>" +
-			    	"<div class+'clearfix'></div>" +
+			    	"<div class='clearfix'></div>" +
 			    	"<p class='inline bold'>Deadline</p>" +
 			    	"<p class='inline'>" + ": " + task.deadline + "</p>" +
+			    	"<div class='clearfix'></div>" +
+			    	"<p class='inline bold'>Comments</p>" +
+			    	"<p class='inline'>" + ": " + task.comment + "</p>" +
 		    	"</div>"
 		    	)
 					.style("left", (d3.event.pageX) + "px")

@@ -8,13 +8,20 @@
 <p>
 	<%= f.label :priority %>
 	<br>
-	<%= f.text_area :priority %>
+	<div class="normal">
+	  <%= f.radio_button :priority, '3', :checked => true %>
+	  <%= label :priority_3, 'Low' %>
+	  <%= f.radio_button :priority, '2' %>
+	  <%= label :priority_2, 'Medium' %>
+	  <%= f.radio_button :priority, '1' %>
+	  <%= label :priority_1, 'High' %>
+	</div>
 </p>
 
 <p>
 	<%= f.label :deadline %>
 	<br>
-	<%= f.date_field :deadline %>
+	<%= f.date_field :deadline, class: 'full-width' %>
 </p>
 
 <p>
@@ -24,7 +31,9 @@
 </p>
 
 <p>
-	<%= f.select :category_id, @category_options %>
+	<%= f.label :category_id %>
+	<br>
+	<%= f.select :category_id, @category_options, {}, class: 'styled-select' %>
 </p>
 
 <p><%= f.submit %></p>

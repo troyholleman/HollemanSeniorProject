@@ -13,10 +13,14 @@ class TasksController < ApplicationController
   def create
     @task = current_user.tasks.new(task_params)
     @task.user_id = current_user.id
-    # @join = current_user.categories.joins(:tasks).where('tasks.category_id' => :category_id )
-    # @task = current_user.categories.tasks.new(task_params)
- 
-    @task.save
+    @task.complete = false;
+    
+    if @task.valid?
+      @task.save
+    else
+      flash[:alert] = @task.errors.messages
+    end
+    
     redirect_to root_path
   end
   
@@ -27,13 +31,24 @@ class TasksController < ApplicationController
     if @task.update(task_params)
       redirect_to root_path
     else
-      render :edit
-      # IS THIS RIGHT??
+      redirect_to root_path
     end
   end
   
   def destroy
     @task.destroy
+    
+    redirect_to root_path
+  end
+  
+  def complete
+    task = set_task
+    if !task.complete
+      task.complete = true;
+    else
+      task.complete = false;
+    end
+    task.save
     
     redirect_to root_path
   end

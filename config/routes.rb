@@ -2,6 +2,9 @@ Rails.application.routes.draw do
 
   # get 'categories/new'
   # get 'category/index'
+  
+  post 'tasks/:id' => 'tasks#complete'
+  post 'parseInput', to: 'dashboard#parseInput'
 
   root 'dashboard#home'
 
