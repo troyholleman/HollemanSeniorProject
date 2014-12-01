@@ -78,6 +78,6 @@ Rails.application.configure do
   
   # ------------ CUSTOM ------------ #
   
-  config.assets.precompile += %w( popover.js )
+  config.assets.precompile += %w( "popover.js" )
   
 end
