@@ -18,3 +18,4 @@
 //= require bootstrap
 //= require bootstrap-colorpicker
 //= require d3
+//= require popover

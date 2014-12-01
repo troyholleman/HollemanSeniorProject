@@ -215,7 +215,7 @@
 					.style("top", (d3.event.pageY - 28) + "px");
 		   })
 		   
-		  .on("mouseout", function (task) {
+		  .on("dblclick", function (task) {
 		    div.transition()
 		     .duration(500)
 		     .style("opacity", 0);
