@@ -37,6 +37,10 @@ gem 'bootstrap-colorpicker-rails'
 gem "therubyracer"
 gem "less-rails"
 
+group :production do
+  gem 'rails_12factor', '0.0.2'
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
