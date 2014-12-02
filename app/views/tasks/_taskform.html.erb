@@ -1,13 +1,13 @@
 
 <p>
 	<%= f.label :name %>
-	<br>
+	<br />
 	<%= f.text_field :name %>
 </p>
 
 <p>
 	<%= f.label :priority %>
-	<br>
+	<br/ >
 	<div class="normal">
 	  <%= f.radio_button :priority, '3', :checked => true %>
 	  <%= label :priority_3, 'Low' %>
@@ -20,19 +20,19 @@
 
 <p>
 	<%= f.label :deadline %>
-	<br>
+	<br />
 	<%= f.date_field :deadline, class: 'full-width' %>
 </p>
 
 <p>
 	<%= f.label :comment %>
-	<br>
+	<br />
 	<%= f.text_area :comment %>
 </p>
 
 <p>
 	<%= f.label :category_id %>
-	<br>
+	<br />
 	<%= f.select :category_id, @category_options, {}, class: 'styled-select' %>
 </p>
 

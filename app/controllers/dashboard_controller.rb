@@ -38,27 +38,29 @@ class DashboardController < ApplicationController
   # end
   
   def parseInput
-    name = cat_id = priority = deadline = comment = nil
+    @categories = current_user.categories
+    
+    name = cat_id = priority = deadline = comment = ""
     temp = hash_params[:hash]
     temp = temp.split()
     
     temp.each do |string|
-      if string.split(//).first === '-'
-        name = string.split('-').last
-      elsif string.split(//).first === '#'
-        cat_id = string.split('#').last
+      if string.split(//).first === '#'     
+        cat_id = @categories.where(:name => string.split('#').last)
       elsif string.split(//).first === '~'
         priority = string.split('~').last
       elsif string.split(//).first === ':'
         deadline = string.split(':').last
       elsif string.split(//).first === '+'
         comment = string.split('+').last
+      else
+        name << string << " "
       end
     end
     
-    # flash[:alert] = cat_id
+    # flash[:alert] = cat_id, priority, deadline, comment, name.rstrip
     
-    @task = current_user.tasks.new(name: name, category_id: cat_id, priority: priority, deadline: deadline, comment: comment)
+    @task = current_user.tasks.new(name: name.rstrip, priority: priority, deadline: deadline, comment: comment, category_id: cat_id)
     @task.user_id = current_user.id
     @task.complete = false;
     

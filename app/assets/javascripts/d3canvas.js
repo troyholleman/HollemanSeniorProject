@@ -5,8 +5,8 @@
 	var categories = gon.categories;
 	//var cat_tasks = gon.cat_tasks;
 	
-	var width = 600,
-			height = 500,
+	var width = 550,
+			height = 550,
 			
 			radius = 6,
 			radiusAll = 120,
@@ -46,13 +46,13 @@
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
-				return outerRadius / 3;
+				return 1.5 * outerRadius / 3 + 1;
 				break;
 			case 2:
-				return outerRadius / 1.5;
+				return 1.5 * outerRadius / 1.75;
 				break;
 			case 3:
-				return outerRadius - 0.5;
+				return 1.5 * outerRadius;
 				break;
 		};
 	};
@@ -89,6 +89,11 @@
 				return categories[categoryIndex];
 		}
 	};
+	
+	for (var t in tasks) {
+		t.x = cx;
+		t.y = cy;
+	}
 	
 	// ---------------- D3 Canvas ---------------- //
 	
@@ -130,6 +135,7 @@
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
 		
 	var centerText = canvasSVG.append("text")
+			.attr("fill", "#5c5c5c")
 		  .attr("text-anchor", "middle")
 		  .attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
 		  .text("NOW");
@@ -137,6 +143,23 @@
 	var force = d3.layout.force()
     .nodes(current_tasks)
     .size([width, height])
+    //.linkStrength(1)
+    //.linkDistance(40)
+    //.gravity(0.3)
+    // .charge(function (task) {
+    	// switch (task.priority) {
+				// case 1:
+					// return -30;
+					// break;
+				// case 2:
+					// return -60;
+					// break;
+				// case 3:
+					// return -90;
+					// break;
+			// };
+    // })
+    .chargeDistance(50)
     .start();
   
   force.on("tick", function (e) {
@@ -173,23 +196,23 @@
 		  	.style("stroke", function (task) { return getCategory(task).color; })
 			  
 			  .attr("r", radius)
-			  .attr("cx", function (task) { return task.x; })
-			  .attr("cy", function (task) { return task.y; })
+			  // .attr("cx", function (task) { return task.x; })
+			  // .attr("cy", function (task) { return task.y; })
 			  .call(force.drag)
 				  
-				  // .attr("cx", function (task) {
-				  	// return cx +
-				  	// // Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-				  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
-				  	// // * task.priority * (taskPosition(task) / 7);
-			  	// })
-				  // .attr("cy", function (task) {
-				  	// return cy + 
-				  	// // Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-				  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
-				  	// // * task.priority * (taskPosition(task) / 7);
-			  	// })
-			  	//.attr("transform", "translate(" + Math.floor( Math.random() * 10 ) + ", " + Math.floor( Math.random() * 10 ) + ")")
+			  // .attr("cx", function (task) {
+			  	// return cx +
+			  	// // Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+			  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
+			  	// // * task.priority * (taskPosition(task) / 7);
+		  	// })
+			  // .attr("cy", function (task) {
+			  	// return cy + 
+			  	// // Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
+			  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
+			  	// // * task.priority * (taskPosition(task) / 7);
+		  	// })
+		  	// .attr("transform", "translate(" + Math.floor( Math.random() * 10 ) + ", " + Math.floor( Math.random() * 10 ) + ")")
 			
 		  .on("click", function (task) {
 		  	div.transition()
@@ -215,11 +238,17 @@
 					.style("top", (d3.event.pageY - 28) + "px");
 		   })
 		   
-		  .on("dblclick", function (task) {
+		  .on("mouseout", function (task) {
 		    div.transition()
 		     .duration(500)
 		     .style("opacity", 0);
 		  });
+		  
+	  // var k = 0;
+		// while ((force.alpha() > 1e-2) && (k < 150)) {
+		    // force.tick(),
+		    // k = k + 1;
+		// }
 	// }
 	
 // for (var t in cat_tasks) {

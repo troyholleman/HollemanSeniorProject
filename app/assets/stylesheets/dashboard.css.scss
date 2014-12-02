@@ -10,9 +10,19 @@
   overflow: auto;
 }
 
-table.data-table { width: 100%; }
+table.data-table {
+  width: 100%;
+}
+  table.data-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+  }
   table.data-table td,
-  table.data-table th { padding: 5px 15px; }
+  table.data-table tr {
+    padding: 2%;
+  }
 
 div.info-popup {
   position: absolute;
@@ -26,7 +36,6 @@ div.info-popup {
   border-radius: 50%;
   width: 200px;
   height: 200px;
-  pointer-events: none;
 }
 
 .task-info {
@@ -50,8 +59,10 @@ select.styled-select {
 }
 
 @media screen and (min-width: 770px) {
-  .control-group { border-left: 2px solid #c2c2c2; }
-  .control-group > .inline { margin: 50% 0; }
+  .control-group {
+    border-left: 2px solid #c2c2c2;
+    height: 500px;
+  }
 }
 
 circle {
