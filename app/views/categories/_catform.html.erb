@@ -1,17 +1,30 @@
 
-<p>
-	<%= f.label :name %>
-	<br>
-	<%= f.text_field :name %>
-</p>
+<div class="form">
 	
-<p>
-	<%= f.label :color %>
-	<br>
-	<div><%= f.text_field :color, class: 'cp' %></div>
-</p>
+	<div>
+		<%= f.label :name %>
+		<br />
+		<%= f.text_field :name, class: 'form-control' %>
+	</div>
+		
+	<div>
+		<%= f.label :color %>
+		<br />
+		<div class="input-group">
+			<div class="input-group-addon">
+				<i class="fa fa-paint-brush"></i>
+			</div>
+			<%= f.text_field :color, class: 'cp form-control', placeholder: 'Click to Pick Color' %>
+		</div>
+	</div>
+	
+	<div>
+		<%= button_tag(type: 'submit', class: "btn btn-primary") do %>
+			<span>Save</span><i class="fa fa-check"></i>
+		<% end %>
+	</div>
 
-<p><%= f.submit %></p>
+</div>
 
 <script>
 	$('.cp').colorpicker().on('changeColor', function(ev) {

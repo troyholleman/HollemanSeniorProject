@@ -4,7 +4,6 @@ class TasksController < ApplicationController
   
   def index
     @tasks = Task.all
-    @categories = Category.all
   end
   
   def show
@@ -31,13 +30,13 @@ class TasksController < ApplicationController
     if @task.update(task_params)
       redirect_to root_path
     else
+      flash[:alert] = @task.errors.full_messages
       redirect_to root_path
     end
   end
   
   def destroy
     @task.destroy
-    
     redirect_to root_path
   end
   

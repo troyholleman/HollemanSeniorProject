@@ -1,37 +1,48 @@
 
-<p>
-	<%= f.text_field :name, class: "form-control", placeholder: "Name" %>
-</p>
-
-<p>
-	<%= f.label :priority %>
-	<br/ >
-	<div class="normal">
-	  <%= f.radio_button :priority, '3', :checked => true %>
-	  <%= label :priority_3, 'Low' %>
-	  <%= f.radio_button :priority, '2' %>
-	  <%= label :priority_2, 'Medium' %>
-	  <%= f.radio_button :priority, '1' %>
-	  <%= label :priority_1, 'High' %>
+<div class="form">
+	
+	<div>
+		<%= f.label :name %>
+		<br />
+		<%= f.text_field :name, class: 'form-control' %>
 	</div>
-</p>
-
-<p>
-	<%= f.label :deadline %>
-	<br />
-	<%= f.date_field :deadline, class: 'full-width' %>
-</p>
-
-<p>
-	<%= f.label :comment %>
-	<br />
-	<%= f.text_area :comment %>
-</p>
-
-<p>
-	<%= f.label :category_id %>
-	<br />
-	<%= f.select :category_id, @category_options, {}, class: 'styled-select' %>
-</p>
-
-<p><%= f.submit %></p>
+	
+	<div>
+		<%= f.label :priority %>
+		<br/ >
+		<label class="radio-inline">
+		  <%= f.radio_button :priority, '3', :checked => true %>Low
+	  </label>
+		<label class="radio-inline">
+		  <%= f.radio_button :priority, '2' %>Medium
+	  </label>
+		<label class="radio-inline">
+		  <%= f.radio_button :priority, '1' %>High
+	  </label>
+	</div>
+	
+	<div>
+		<%= f.label :deadline %>
+		<br />
+		<%= f.date_field :deadline, class: 'form-control' %>
+	</div>
+	
+	<div>
+		<%= f.label :comment %>
+		<br />
+		<%= f.text_area :comment, class: 'form-control remove-resize' %>
+	</div>
+	
+	<div>
+		<%= f.label :category_id %>
+		<br />
+		<%= f.select :category_id, @category_options, {}, class: 'form-control' %>
+	</div>
+	
+	<div>
+		<%= button_tag(type: 'submit', class: "btn btn-primary") do %>
+			<span>Save</span><i class="fa fa-check"></i>
+		<% end %>
+	</div>
+	
+</div>

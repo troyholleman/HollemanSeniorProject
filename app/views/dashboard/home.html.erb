@@ -7,7 +7,7 @@
 	<div class="row">
 		
 		<div class="col-md-6">
-			<h1>Wompello</h1>
+			<h1>Cortex</h1>
 		</div>
 		
 		<div class="col-md-6">
@@ -34,11 +34,25 @@
 		<div class="col-md-4">
 			
 			<!-- Quick Task Input -->
-			<div class="three-quarter-width">
+			<div class="display-table width-full" data-toggle="tooltip" data-original-title="task name &nbsp; #category &nbsp; $priority &nbsp; :deadline &nbsp; +comments">
 				<%= form_for :input, url: { action: "parseInput", controller: "dashboard" } do |f| %>
-					<%= f.text_field :hash, placeholder: 'myTask #myCategory ~priority :deadline +comments', class: 'full-width form-control border' %>
+				
+					<%= f.text_field :hash, placeholder: 'Quick Add Task', class: 'form-control width-90 pull-left' %>
+					<%= button_tag(type: 'submit', class: 'btn btn-default remove-border remove-padding-r remove-padding-l pull-right') do %>
+						<i class="fa fa-chevron-right x3 grey"></i>
+					<% end %>
+					
 				<% end %>
 			</div>
+			<!-- <div class="pull-left">
+				<a rel="t" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="top">
+					<i class="fa fa-question-circle fa-2x"></i>
+				</a>
+				<div class="content hide">
+					<p>Test</p>
+				</div>
+			</div> -->
+			<div class="clearfix"></div>
 			
 			<!-- Task Stats -->
 			<div class="row v-margin-l center">
@@ -61,7 +75,7 @@
 			
 			<!-- Current Title / <hr> -->
 			<div class="row">
-				<div class="col-md-5"><h4>Important Tasks</h4></div>
+				<div class="col-md-5"><h4>Current Tasks</h4></div>
 				<div class="col-md-7 remove-padding-l"><hr /></div>
 			</div>
 			
@@ -84,11 +98,10 @@
 								<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
 								<td><%= task.name %></td>
 								<td class="center">
-									<a class="pointer" rel="popover" tabindex="0" data-original-title="Edit Task" data-trigger="focus" data-placement="right">
+									<a class="pointer" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
 										<i class="fa fa-pencil-square-o gray"></i>
 									</a>
 									
-									<div class="head hide"></div>
 									<div class="content hide">
 										<%= form_for task do |f| %>
 											<%= render partial: 'tasks/taskform', :locals => { f: f } %>
@@ -155,15 +168,14 @@
 		<!------------------------------- Right Third ------------------------------->
 		
 		<div class="col-md-1">
-			<div class="control-group table remove-margin">
+			<div class="control-group display-table width-full remove-margin">
 			
 				<!-- Add Task Button -->
 				<div>
-					<a rel="popover" tabindex="0" class="btn <%= if @categories.length === 0 then "disabled" end %>" data-toggle="popover" data-original-title="Add New Task" data-trigger="focus" data-placement="left">
+					<a rel="popover" tabindex="0" class="btn <%= if @categories.length === 0 then "disabled" end %>" data-original-title="Add Task" data-toggle="popover" data-trigger="focus" data-placement="left">
 						<i class="fa fa-plus fa-2x"></i>
 					</a>
-	
-					<div class="head hide"></div>
+					
 					<div class="content hide">
 						<%= form_for :task, url: { action: "create", controller: "tasks" } do |f| %>
 							<%= render partial: 'tasks/taskform', :locals => { f: f } %>
@@ -173,24 +185,64 @@
 				
 				<!-- Add Category Button -->
 				<div>
-					<a rel="popover" tabindex="0" class="btn <%= if @categories.length >= 6 then "disabled" end %>" data-toggle="popover" data-original-title="Add New Category" data-trigger="focus" data-placement="left">
+					<a rel="popover" tabindex="0" class="btn <%= if @categories.length >= 6 then "disabled" end %>" data-original-title="Add Category" data-toggle="popover" data-trigger="focus" data-placement="left">
 						<i class="fa fa-plus-square fa-2x"></i>
 					</a>
 	
-					<div class="head hide"></div>
-						<div class="content hide">
-							<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
-								<%= render partial: 'categories/catform', :locals => { f: f } %>
-							<% end %>
-						</div>
+					<div class="content hide">
+						<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
+							<%= render partial: 'categories/catform', :locals => { f: f } %>
+						<% end %>
+					</div>
 				</div>
+				
+				<div>
+					<a rel="popover" tabindex="0" class="btn" data-original-title="Edit Categories" data-toggle="popover" data-trigger="focus" data-placement="left">
+						<i class="fa fa-folder fa-2x"></i>
+					</a>
 	
+					<div class="content hide">
+						<table class="data-table" style="width: 200px;">
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% @categories.each do |category| %>
+								<tr>
+									
+									<td><div class="circle" style="background-color: <%= category.color %>;"></div></td>
+									<td><%= category.name %></td>
+									<td>
+										<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="left">
+											<i class="fa fa-pencil-square-o"></i>
+										</a>
+										
+										<div class="content hide">
+											<%= form_for category do |f| %>
+												<%= render partial: 'categories/catform', :locals => { f: f } %>
+											<% end %>
+										</div>
+									</td>
+									
+									<td class="center">
+										<%= link_to "<i class='fa fa-times'></i>".html_safe, category_path(category), method: :delete %>
+									</td>
+			
+								</tr>
+								<% end %>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+				
 				<div>
 					<a class="btn disabled"> <i class="fa fa-filter fa-2x"></i> </a>
-				</div>
-	
-				<div>
-					<a class="btn disabled"> <i class="fa fa-folder fa-2x"></i> </a>
 				</div>
 	
 				<!-- <div>
@@ -211,7 +263,7 @@
 			
 			<h3>All Tasks</h3>
 			
-			<table class="data-table full-width">
+			<table class="data-table width-full">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -262,7 +314,7 @@
 			
 			<h3>All Categories</h3>
 			
-			<table class="data-table full-width">
+			<table class="data-table width-full">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -297,11 +349,20 @@
 				</tbody>
 			</table>
 		</div>
-		
-	</div>
-</div> -->
+	</div> -->
+	
+</div>
 
 <!------------ Javascript ------------>
 
 <%= javascript_include_tag "application" %>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip({
+	        placement : 'auto top',
+	        delay : { show: 2000, hide: 500 },
+	    });
+	});
+</script>
 

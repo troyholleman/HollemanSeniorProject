@@ -5,13 +5,13 @@
 	var categories = gon.categories;
 	//var cat_tasks = gon.cat_tasks;
 	
-	var width = 550,
+	var width = $("#graph").width(),
 			height = 550,
 			
 			radius = 6,
 			radiusAll = 120,
       
-      startAngle = Math.PI * 1.75,
+      startAngle = Math.PI * 1.7,
       stepAngle = (2 * Math.PI) / categories.length,
       outerRadius = 2 * radiusAll,
       innerRadius = radiusAll / 4;
@@ -63,7 +63,7 @@
   			return getCategory(task).color;
   			break;
 			case 2:
-				return toRgba(getCategory(task).color, 20);
+				return toRgba(getCategory(task).color, 30);
 				break;
 			case 3:
 				return toRgba(getCategory(task).color, 0);
@@ -92,10 +92,11 @@
 	
 	// ---------------- D3 Canvas ---------------- //
 	
-	var canvasSVG = d3.select("#graph")
-	  .append("svg")
-		  .attr("width", width)
-		  .attr("height", height);
+	var canvasSVG = d3.select("#graph").append("svg")
+		.attr("preserveAspectRatio", "xMidYMid")
+	  .attr("viewBox", "0 0 800 500")
+		.attr("width", width)
+		.attr("height", height);
 	
 	var div = d3.select("body").append("div")
 	  .attr("class", "info-popup")
@@ -119,9 +120,19 @@
 			.attr("stroke-width", 2)
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
-			// .append("text")
+			
+	var labels = canvasSVG.selectAll("g.text")
+			.data(categories)
+			.enter()
+			.append("g")
+					.attr("class", "cat")
+					.attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
           // .attr("text-anchor", "middle") //center the text on it's origin
-          // .text(function(cat) { return cat.name; });
+          // .attr("cx", cx)
+          // .attr("cy", cy)
+          // .attr("cx", function (task) { return cx + Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius })
+          // .attr("cy", function (task) { return cy + Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius })
+          .text(function(cat) { return cat.name; });
 	  
 	var center = canvasSVG.append("circle")
 			.attr("r", radius * 5)
@@ -208,18 +219,18 @@
 		    div.html(
 		    	"<div class='task-info'>" +
 		    	
-			    	"<h5 class='bold'>What you need to do:</h5>" +
+			    	"<h5 class='bold'>Your Task:</h5>" +
 			    	"<p>" + task.name + "</p>" +
 			    	
-			    	"<p class='inline bold'>Priority :</p>" +
-			    	"<p class='inline'>" + task.priority + "</p>" +
+			    	"<p class='display-inline bold'>Priority:</p>" + " " +
+			    	"<p class='display-inline'>" + task.priority + "</p>" +
 			    	"<div class='clearfix'></div>" +
 			    	
-			    	"<p class='inline bold'>Deadline :</p>" +
-			    	"<p class='inline'>" + task.deadline + "</p>" +
+			    	"<p class='display-inline bold'>Deadline:</p>" + " " +
+			    	"<p class='display-inline'>" + task.deadline + "</p>" +
 			    	"<div class='clearfix'></div>" +
 			    	
-			    	"<p class='bold'>Comments</p>" +
+			    	"<p class='bold'>Comments:</p>" + " " +
 			    	"<p>" + task.comment + "</p>" +
 			    	
 		    	"</div>"
@@ -247,3 +258,9 @@
 	// console.log(cat_tasks[t]);
 	// drawCircles(cat_tasks[t]);
 // }
+
+$(window).resize(function() {
+  var width = $("#graph").width();
+  canvasSVG.attr("width", width);
+  canvasSVG.attr("height", height);
+});

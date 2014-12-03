@@ -9,7 +9,7 @@ class DashboardController < ApplicationController
     @categories = @current_user.categories
     
     # @current_tasks = @current_user.tasks
-    @current_tasks = @current_user.tasks.where(complete: false).order(:deadline, :priority)
+    @current_tasks = @current_user.tasks.where(complete: false).order( :priority, :deadline)
     @completed_tasks = @current_user.tasks.where(complete: true)
     
     @category_options = @categories.map{ |u| [ u.name, u.id ] }
@@ -22,19 +22,7 @@ class DashboardController < ApplicationController
     gon.completed_tasks = @completed_tasks
     gon.category_options = @category_options
     gon.categories = @categories
-    # gon.cat_tasks = find_tasks_by_cat
   end
-  
-  # def find_tasks_by_cat
-    # @hash = {}
-    # categories = @categories
-#     
-    # categories.each do |c|
-      # @hash[c.name] = c.tasks
-    # end
-#     
-    # @hash
-  # end
   
   def parseInput
     @categories = current_user.categories
@@ -48,8 +36,8 @@ class DashboardController < ApplicationController
     temp.each do |string|
       if string.index('#') === 0
         cat_name = string.split('#').last
-      elsif string.index('~') === 0
-        priority = string.split('~').last
+      elsif string.index('$') === 0
+        priority = string.split('$').last
       elsif string.index(':') === 0
         deadline = string.split(':').last
       elsif string.index('+') === 0

@@ -2,7 +2,9 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-// ----------------- CUSTOM CSS --------------->
+// ----------------- Custom --------------->
+
+span + i { padding-left: 10px; }
 
 #table-wrapper-l {
   position: relative;
@@ -12,13 +14,11 @@
 
 #table-wrapper-s {
   position: relative;
-  max-height: 95px;
+  max-height: 130px;
   overflow: auto;
 }
 
-table.data-table {
-  width: 100%;
-}
+table.data-table { width: 100%; }
   table.data-table td {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -41,33 +41,18 @@ div.info-popup {
   border-style: solid;
   color: #5c5c5c;
   border-radius: 50%;
-  min-width: 200px;
-  min-height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
-.task-info {
-  padding: 25px 10px 0 10px;
+.task-info { padding: 10px 10px 0 10px; }
+  .task-info p { word-wrap: break-word; }
+  
+.form > div:not(:last-child) {
+  margin-bottom: 10%;
 }
-  .task-info p {
-    max-width: 150px;
-    word-wrap: break-word;
-  }
-
-select.styled-select {
-   -webkit-appearance: button;
-   -webkit-border-radius: 0;
-   -webkit-user-select: none;
-   background-image: url("http://i62.tinypic.com/15xvbd5.png");
-   background-position: 97% center;
-   background-repeat: no-repeat;
-   border: 1px solid #AAA;
-   font-size: inherit;
-   overflow: hidden;
-   padding: 5px 10px;
-   text-overflow: ellipsis;
-   white-space: nowrap;
-   width: 100%;
-}
+  
+// ----------------- Responsive --------------->
 
 @media screen and (min-width: 770px) {
   .control-group {
@@ -76,18 +61,36 @@ select.styled-select {
   }
 }
 
+// ----------------- Shapes --------------->
+
 circle {
   stroke-width: 2px;
   vector-effect:non-scaling-stroke;
 }
 
-// ----------------- Overridden CSS --------------->
+// ----------------- Overrides --------------->
 
-.dropdown-menu {
-  z-index: 1080 !important;
-}
+.dropdown-menu { z-index: 1080 !important; }
 
 .form-control {
   color: #5c5c5c;
   border: 2px solid #c2c2c2 !important;
 }
+
+.input-group-addon {
+  border: 2px solid #c2c2c2 !important;
+  border-right: 0 !important;
+}
+
+.tooltip {
+  font-size: inherit;
+  width: auto;
+}
+.tooltip-inner {
+  max-width: 100% !important;
+  background-color: #335F7C !important;
+  padding: 5px;
+}
+  .tooltip.top .tooltip-arrow {
+    border-top-color: #335F7C !important;
+  }

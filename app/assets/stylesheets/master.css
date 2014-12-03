@@ -4,13 +4,18 @@
 html { margin: 10px; }
 
 body {
-	color: #5c5c5c;
+	color: #6A6D6B;
 	font-family: 'Roboto', sans-serif;
-	font-size: 1.5em;
+	font-size: 14px;
 }
 
-a { color: #5c5c5c; }
-	a:hover { color: #FF3300 !important; }
+a {
+	color: #6A6D6B;
+	outline: none !important;
+}
+	a:hover { color: #335F7C !important; }
+	
+i { color: inherit !important; }
 	
 hr {
   border-color: #c2c2c2;
@@ -19,19 +24,32 @@ hr {
 
 /* ---------------- Alignment ------------------ */
 
-.inline { display: inline-block; }
-	.inline-all * { display: inline-block; }
+.display-inline { display: inline-block; }
+	.display-inline-all * { display: inline-block; }
+	
+.display-relative { display: relative; }
+	.display-relative-all * { display: relative; }
 
-.table { display: table; }
-	.table > div { display: table-row; }
-	.table > div > a { display: table-cell; }
-.table-row { display: table-row; }
-.table-cell { display: table-cell; }
+.display-table { display: table; }
+	.display-table > div { display: table-row; }
+	.display-table > div > a { display: table-cell; }
+.display-table-row { display: table-row; }
+.display-table-cell { display: table-cell; }
 
 .vertical-align { vertical-align: middle; }
 
-.full-width { width: 100%; }
-.three-quarter-width { width: 75%; }
+/* ---------------- Sizing ------------------ */
+
+.width-full { width: 100%; }
+.width-90 { width: 90%; }
+.width-80 { width: 80%; }
+.width-70 { width: 70%; }
+.width-60 { width: 60%; }
+.width-50 { width: 50%; }
+.width-40 { width: 40%; }
+.width-30 { width: 30%; }
+.width-20 { width: 20%; }
+.width-10 { width: 10%; }
 
 /* ---------------- Shapes ------------------ */
 
@@ -81,23 +99,34 @@ hr {
 .remove-padding-l { padding-left: 0 !important; }
 .remove-padding-r { padding-right: 0 !important; }
 
+/* ---------------- Border ------------------ */
+
+.remove-border { border: 0 !important; }
+
 /* ---------------- Color ------------------ */
 
-.red { color: #990000; }
-.green { color: #5F874D; }
-.gray { color: #343434; }
-.orange { color: #FF3300; }
+.red { color: #850B0B !important; }
+.green { color: #6DAA7E !important; }
+.blue { color: #335F7C !important; }
+.grey { color: #6A6D6B !important; }
 
 /* ---------------- Font ------------------ */
 
 .left { text-align: left; }
 .center { text-align: center; }
 
-.light * { font-weight: 300 !important; }
-.normal * { font-weight: 400 !important; }
-.medium * { font-weight: 500 !important; }
-.bold * { font-weight: 700 !important; }
+.light, .light * { font-weight: 300 !important; }
+.normal, .normal * { font-weight: 400 !important; }
+.medium, .medium * { font-weight: 500 !important; }
+.bold, .bold * { font-weight: 700 !important; }
+
+.x2 { font-size: 1.2em; }
+.x3 { font-size: 1.4em; }
+.x4 { font-size: 1.6em; }
+.x5 { font-size: 1.8em; }
+.x6 { font-size: 2em; }
 
 /* ---------------- Misc ------------------ */
 
 .pointer { cursor: pointer; }
+.remove-resize { resize: none; }

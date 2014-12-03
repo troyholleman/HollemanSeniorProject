@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
   
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_cat, only: [:show, :edit, :update, :destroy]
   
   def index
     @categories = Category.all
@@ -9,7 +9,12 @@ class CategoriesController < ApplicationController
   def create
     @category = current_user.categories.new(category_params)
     
-    @category.save
+    if @category.valid?
+      @category.save
+    else
+      flash[:alert] = @category.errors.full_messages
+    end
+    
     redirect_to root_path
   end
   
@@ -22,7 +27,8 @@ class CategoriesController < ApplicationController
     if @category.update(category_params)
       redirect_to root_path
     else
-      redirect_to root_path 
+      flash[:alert] = @category.errors.full_messages
+      redirect_to root_path
     end
   end
   
@@ -32,7 +38,7 @@ class CategoriesController < ApplicationController
     params.require(:category).permit(:name, :color)
   end
   
-  def set_task
+  def set_cat
     @category = Category.find params[:id]
   end
 end
