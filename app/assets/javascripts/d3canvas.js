@@ -2,6 +2,8 @@
 	// ---------------- VARIABLES ---------------- //
 	
 	var current_tasks = gon.current_tasks;
+	var completed_tasks = gon.completed_tasks;
+	var overdue_tasks = gon.overdue_tasks;
 	var categories = gon.categories;
 	//var cat_tasks = gon.cat_tasks;
 	

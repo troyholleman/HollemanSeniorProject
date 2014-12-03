@@ -3,14 +3,16 @@ class DashboardController < ApplicationController
   before_action :authenticate_user!
   
   def home
+    
     @current_user = current_user
     @current_user_id = current_user.id
     
     @categories = @current_user.categories
     
     # @current_tasks = @current_user.tasks
-    @current_tasks = @current_user.tasks.where(complete: false).order( :priority, :deadline)
+    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ?", false, Date.today).order( :priority, :deadline)
     @completed_tasks = @current_user.tasks.where(complete: true)
+    @overdue_tasks = @current_user.tasks.where("deadline < ?", Date.today)
     
     @category_options = @categories.map{ |u| [ u.name, u.id ] }
     
@@ -18,8 +20,11 @@ class DashboardController < ApplicationController
     gon.clear
     
     gon.current_user = @current_user
+    
     gon.current_tasks = @current_tasks
     gon.completed_tasks = @completed_tasks
+    gon.overdue_tasks = @overdue_tasks
+    
     gon.category_options = @category_options
     gon.categories = @categories
   end
