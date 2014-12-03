@@ -9,13 +9,12 @@ class DashboardController < ApplicationController
     @categories = @current_user.categories
     
     # @current_tasks = @current_user.tasks
-    @current_tasks = @current_user.tasks.where(complete: false).order(:priority, :deadline)
+    @current_tasks = @current_user.tasks.where(complete: false).order(:deadline, :priority)
     @completed_tasks = @current_user.tasks.where(complete: true)
     
     @category_options = @categories.map{ |u| [ u.name, u.id ] }
     
     # -- Javascript Variables -- #
-    
     gon.clear
     
     gon.current_user = @current_user
@@ -40,21 +39,29 @@ class DashboardController < ApplicationController
   def parseInput
     @categories = current_user.categories
     
-    name = cat_id = priority = deadline = comment = ""
+    name = cat_name = comment = ""
+    cat_id = priority = deadline = nil
+    
     temp = hash_params[:hash]
     temp = temp.split()
     
     temp.each do |string|
-      if string.split(//).first === '#'     
-        cat_id = @categories.where(:name => string.split('#').last)
-      elsif string.split(//).first === '~'
+      if string.index('#') === 0
+        cat_name = string.split('#').last
+      elsif string.index('~') === 0
         priority = string.split('~').last
-      elsif string.split(//).first === ':'
+      elsif string.index(':') === 0
         deadline = string.split(':').last
-      elsif string.split(//).first === '+'
+      elsif string.index('+') === 0
         comment = string.split('+').last
       else
         name << string << " "
+      end
+    end
+    
+    @categories.each do |cat|
+      if cat.name === cat_name
+        cat_id = cat.id
       end
     end
     
@@ -65,9 +72,13 @@ class DashboardController < ApplicationController
     @task.complete = false;
     
     if @task.valid?
+      if @task.deadline === nil
+        @task.deadline = "none";
+      end
+      
       @task.save
     else
-      flash[:alert] = @task.errors.messages
+      flash[:alert] = @task.errors.full_messages
     end
     
     redirect_to root_path

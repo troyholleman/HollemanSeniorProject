@@ -4,9 +4,15 @@
 
 // ----------------- CUSTOM CSS --------------->
 
-#table-wrapper {
+#table-wrapper-l {
   position: relative;
-  max-height: 180px;
+  max-height: 170px;
+  overflow: auto;
+}
+
+#table-wrapper-s {
+  position: relative;
+  max-height: 95px;
   overflow: auto;
 }
 
@@ -18,10 +24,11 @@ table.data-table {
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 150px;
-  }
-  table.data-table td,
-  table.data-table tr {
     padding: 2%;
+  }
+  table.data-table tr:not(:first-child) {
+    padding: 2%;
+    border-top: 1px dotted #c2c2c2;
   }
 
 div.info-popup {
@@ -34,13 +41,17 @@ div.info-popup {
   border-style: solid;
   color: #5c5c5c;
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  min-width: 200px;
+  min-height: 200px;
 }
 
 .task-info {
   padding: 25px 10px 0 10px;
 }
+  .task-info p {
+    max-width: 150px;
+    word-wrap: break-word;
+  }
 
 select.styled-select {
    -webkit-appearance: button;
@@ -76,7 +87,7 @@ circle {
   z-index: 1080 !important;
 }
 
-hr {
-  border-color: #c2c2c2;
-  border-width: 2px !important;
+.form-control {
+  color: #5c5c5c;
+  border: 2px solid #c2c2c2 !important;
 }

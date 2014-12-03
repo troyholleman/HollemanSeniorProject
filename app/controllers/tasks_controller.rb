@@ -18,7 +18,7 @@ class TasksController < ApplicationController
     if @task.valid?
       @task.save
     else
-      flash[:alert] = @task.errors.messages
+      flash[:alert] = @task.errors.full_messages
     end
     
     redirect_to root_path

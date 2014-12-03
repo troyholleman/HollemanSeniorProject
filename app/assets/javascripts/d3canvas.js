@@ -46,10 +46,10 @@
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
-				return 1.5 * outerRadius / 3 + 1;
+				return 1.5 * outerRadius / 3;
 				break;
 			case 2:
-				return 1.5 * outerRadius / 1.75;
+				return 1.5 * outerRadius / 1.5;
 				break;
 			case 3:
 				return 1.5 * outerRadius;
@@ -90,11 +90,6 @@
 		}
 	};
 	
-	for (var t in tasks) {
-		t.x = cx;
-		t.y = cy;
-	}
-	
 	// ---------------- D3 Canvas ---------------- //
 	
 	var canvasSVG = d3.select("#graph")
@@ -104,7 +99,8 @@
 	
 	var div = d3.select("body").append("div")
 	  .attr("class", "info-popup")
-	  .style("opacity", 0);
+	  .style("opacity", 0)
+	  .style("display", "none");
 	  
 	var arc = d3.svg.arc()
 		.innerRadius(innerRadius)
@@ -143,23 +139,11 @@
 	var force = d3.layout.force()
     .nodes(current_tasks)
     .size([width, height])
-    //.linkStrength(1)
-    //.linkDistance(40)
-    //.gravity(0.3)
-    // .charge(function (task) {
-    	// switch (task.priority) {
-				// case 1:
-					// return -30;
-					// break;
-				// case 2:
-					// return -60;
-					// break;
-				// case 3:
-					// return -90;
-					// break;
-			// };
-    // })
-    .chargeDistance(50)
+    .gravity(0.4)
+    .friction(0.5)
+    //.charge(-60)
+    //.theta(0.5)
+    //.alpha(0.5)
     .start();
   
   force.on("tick", function (e) {
@@ -196,9 +180,9 @@
 		  	.style("stroke", function (task) { return getCategory(task).color; })
 			  
 			  .attr("r", radius)
+			  .call(force.drag)
 			  // .attr("cx", function (task) { return task.x; })
 			  // .attr("cy", function (task) { return task.y; })
-			  .call(force.drag)
 				  
 			  // .attr("cx", function (task) {
 			  	// return cx +
@@ -218,20 +202,26 @@
 		  	div.transition()
 		      .duration(200)
 		      .style("opacity", 1)
-		      .style("border-color", getCategory(task).color );
+		      .style("border-color", getCategory(task).color )
+		      .style("display", "block");
 		      
 		    div.html(
 		    	"<div class='task-info'>" +
+		    	
 			    	"<h5 class='bold'>What you need to do:</h5>" +
 			    	"<p>" + task.name + "</p>" +
-			    	"<p class='inline bold'>Priority</p>" +
-			    	"<p class='inline'>" + ": " + task.priority + "</p>" +
+			    	
+			    	"<p class='inline bold'>Priority :</p>" +
+			    	"<p class='inline'>" + task.priority + "</p>" +
 			    	"<div class='clearfix'></div>" +
-			    	"<p class='inline bold'>Deadline</p>" +
-			    	"<p class='inline'>" + ": " + task.deadline + "</p>" +
+			    	
+			    	"<p class='inline bold'>Deadline :</p>" +
+			    	"<p class='inline'>" + task.deadline + "</p>" +
 			    	"<div class='clearfix'></div>" +
-			    	"<p class='inline bold'>Comments</p>" +
-			    	"<p class='inline'>" + ": " + task.comment + "</p>" +
+			    	
+			    	"<p class='bold'>Comments</p>" +
+			    	"<p>" + task.comment + "</p>" +
+			    	
 		    	"</div>"
 		    	)
 					.style("left", (d3.event.pageX) + "px")
@@ -241,11 +231,13 @@
 		  .on("mouseout", function (task) {
 		    div.transition()
 		     .duration(500)
-		     .style("opacity", 0);
+		     .style("opacity", 0)
+		     .style("display", "none");
 		  });
 		  
 	  // var k = 0;
-		// while ((force.alpha() > 1e-2) && (k < 150)) {
+// 	  
+		// while ((force.alpha() > 1e-2) && (k < 100)) {
 		    // force.tick(),
 		    // k = k + 1;
 		// }

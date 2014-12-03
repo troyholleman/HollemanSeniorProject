@@ -34,9 +34,11 @@
 		<div class="col-md-4">
 			
 			<!-- Quick Task Input -->
-			<%= form_for :input, url: { action: "parseInput", controller: "dashboard" } do |f| %>
-				<%= f.text_field :hash, placeholder: 'myTask #myCategory ~priority :deadline +comments', class: 'full-width padding-xs' %>
-			<% end %>
+			<div class="three-quarter-width">
+				<%= form_for :input, url: { action: "parseInput", controller: "dashboard" } do |f| %>
+					<%= f.text_field :hash, placeholder: 'myTask #myCategory ~priority :deadline +comments', class: 'full-width form-control border' %>
+				<% end %>
+			</div>
 			
 			<!-- Task Stats -->
 			<div class="row v-margin-l center">
@@ -64,8 +66,8 @@
 			</div>
 			
 			<!-- Current Tasks Table -->
-			<div id="table-wrapper" style="margin-bottom: 10px;">
-				<table class="data-table">
+			<div id="table-wrapper-l" style="margin-bottom: 10px;">
+				<table class="data-table table-responsive">
 	
 					<thead>
 						<tr>
@@ -114,7 +116,7 @@
 			</div>
 			
 			<!-- Completed Tasks Table -->
-			<div id="table-wrapper">
+			<div id="table-wrapper-s">
 				<table class="data-table">
 	
 					<thead>
@@ -176,11 +178,11 @@
 					</a>
 	
 					<div class="head hide"></div>
-					<div class="content hide">
-						<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
-							<%= render partial: 'categories/catform', :locals => { f: f } %>
-						<% end %>
-					</div>
+						<div class="content hide">
+							<%= form_for :category, url: { action: "create", controller: "categories" } do |f| %>
+								<%= render partial: 'categories/catform', :locals => { f: f } %>
+							<% end %>
+						</div>
 				</div>
 	
 				<div>

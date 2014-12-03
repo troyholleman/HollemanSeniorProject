@@ -2,6 +2,6 @@ class Task < ActiveRecord::Base
   
   belongs_to :category
   
-  validates :name, presence: true, uniqueness: true
+  validates :name, :category_id, :priority, presence: true
   
 end
