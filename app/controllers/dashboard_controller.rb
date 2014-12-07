@@ -9,17 +9,18 @@ class DashboardController < ApplicationController
     
     @categories = @current_user.categories
     
-    # @current_tasks = @current_user.tasks
-    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ?", false, Date.today).order( :priority, :deadline)
+    # -- Current Tasks -- #
+    # @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ?", false, Date.today).order( :priority, :deadline)
+    @current_tasks = @current_user.tasks.where(complete: false).order( :priority, :deadline)
+    
+    # -- Completed & Overdue Tasks -- #
     @completed_tasks = @current_user.tasks.where(complete: true)
-    @overdue_tasks = @current_user.tasks.where("deadline < ?", Date.today)
+    @overdue_tasks = @current_user.tasks.where("complete = ? AND deadline < ?", false, Date.today)
     
     @category_options = @categories.map{ |u| [ u.name, u.id ] }
     
     # -- Javascript Variables -- #
     gon.clear
-    
-    gon.current_user = @current_user
     
     gon.current_tasks = @current_tasks
     gon.completed_tasks = @completed_tasks
@@ -32,42 +33,50 @@ class DashboardController < ApplicationController
   def parseInput
     @categories = current_user.categories
     
-    name = cat_name = comment = ""
-    cat_id = priority = deadline = nil
+    @name = ""
+    @cat_name = ""
+    @comment = ""
+    @cat_id = nil
+    @priority = nil
+    @deadline = nil
     
     temp = hash_params[:hash]
     temp = temp.split()
     
     temp.each do |string|
-      if string.index('#') === 0
-        cat_name = string.split('#').last
-      elsif string.index('$') === 0
-        priority = string.split('$').last
-      elsif string.index(':') === 0
-        deadline = string.split(':').last
-      elsif string.index('+') === 0
-        comment = string.split('+').last
+      if string.index('#') == 0
+        @cat_name = string.split('#').last
+        
+      elsif string.index('$') == 0
+        @priority = string.split('$').last
+        
+      elsif string.index(':') == 0
+        @deadline = string.split(':').last
+        
+      elsif string.index('+') == 0
+        @comment = string.split('+').last
+        
       else
-        name << string << " "
+        @name << string << " "
       end
     end
     
     @categories.each do |cat|
-      if cat.name === cat_name
-        cat_id = cat.id
+      if cat.name == @cat_name
+        @cat_id = cat.id
       end
     end
     
-    # flash[:alert] = cat_id, priority, deadline, comment, name.rstrip
+    # flash[:alert] = @name.rstrip, @priority, @deadline, @comment, @cat_id, @cat_name
     
-    @task = current_user.tasks.new(name: name.rstrip, priority: priority, deadline: deadline, comment: comment, category_id: cat_id)
+    @task = current_user.tasks.new(name: @name.rstrip, priority: @priority, deadline: @deadline, comment: @comment, category_id: @cat_id)
     @task.user_id = current_user.id
     @task.complete = false;
     
     if @task.valid?
-      if @task.deadline === nil
-        @task.deadline = "none";
-      end
+      # if @task.deadline === nil
+        # @task.deadline = "none";
+      # end
       
       @task.save
     else

@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :complete]
   
   def index
     @tasks = Task.all
@@ -41,13 +41,18 @@ class TasksController < ApplicationController
   end
   
   def complete
-    task = set_task
-    if !task.complete
-      task.complete = true;
+    
+    if @task.complete
+      @task.complete = false
     else
-      task.complete = false;
+      @task.complete = true
     end
-    task.save
+    
+    if @task.save
+      flash[:success] = "Task Saved"
+    else
+      flash[:alert] = @task.errors.full_messages
+    end
     
     redirect_to root_path
   end
