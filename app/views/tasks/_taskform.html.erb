@@ -22,21 +22,21 @@
 	</div>
 	
 	<div>
-		<%= f.label :deadline %>
+		<%= f.label :category_id %>
+		<br />
+		<%= f.select :category_id, @category_options, {}, class: 'form-control' %>
+	</div>
+	
+	<div>
+		<%= f.label :deadline %> (Optional)
 		<br />
 		<%= f.date_field :deadline, class: 'form-control' %>
 	</div>
 	
 	<div>
-		<%= f.label :comment %>
+		<%= f.label :comment %> (Optional)
 		<br />
 		<%= f.text_area :comment, class: 'form-control remove-resize' %>
-	</div>
-	
-	<div>
-		<%= f.label :category_id %>
-		<br />
-		<%= f.select :category_id, @category_options, {}, class: 'form-control' %>
 	</div>
 	
 	<div>

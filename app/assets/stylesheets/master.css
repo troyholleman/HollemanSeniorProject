@@ -24,11 +24,8 @@ hr {
 
 /* ---------------- Alignment ------------------ */
 
-.display-inline { display: inline-block; }
-	.display-inline-all * { display: inline-block; }
-	
-.display-relative { display: relative; }
-	.display-relative-all * { display: relative; }
+.display-inline-block { display: inline-block; }
+	.display-inline-block-all * { display: inline-block; }
 
 .display-table { display: table; }
 	.display-table > div { display: table-row; }
@@ -37,6 +34,13 @@ hr {
 .display-table-cell { display: table-cell; }
 
 .vertical-align { vertical-align: middle; }
+
+/* ---------------- Positioning ------------------ */
+
+.position-relative { position: relative; }
+	.position-relative-all * { position: relative; }
+	
+.position-absolute { position: absolute; }
 
 /* ---------------- Sizing ------------------ */
 

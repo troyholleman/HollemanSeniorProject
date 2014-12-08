@@ -6,7 +6,7 @@
 	
 	<div class="row">
 		
-		<div class="col-md-6 display-inline-all">
+		<div class="col-md-6 display-inline-block-all">
 			<h1>Cortex</h1>
 			<p class="light grey h-margin-s x2">expand your memory</p>
 		</div>
@@ -34,11 +34,13 @@
 		
 		<div class="col-md-4">
 			
-			<!-- Quick Task Input -->
-			<div class="display-table width-full" data-toggle="tooltip" data-original-title="task name &nbsp; #category &nbsp; $priority &nbsp; :deadline &nbsp; +comments">
+			<div class="display-table width-full">
 				<%= form_for :input, url: { action: "parseInput", controller: "dashboard" } do |f| %>
 				
-					<%= f.text_field :hash, placeholder: 'Quick Add Task', class: 'form-control width-90 pull-left' %>
+					<div class="width-90" data-toggle="tooltip" data-original-title="task name &nbsp; #category &nbsp; $priority &nbsp; :deadline &nbsp; +comments">
+						<%= f.text_field :hash, autocomplete: :off, placeholder: 'Quick Add Task', class: 'form-control pull-left' %>
+					</div>
+					
 					<%= button_tag(type: 'submit', class: 'btn btn-default remove-border remove-padding-r remove-padding-l pull-right') do %>
 						<i class="fa fa-chevron-right x3 grey"></i>
 					<% end %>
@@ -82,7 +84,7 @@
 			
 			<!-- Current Tasks Table -->
 			<div id="table-wrapper-l" style="margin-bottom: 10px;">
-				<table class="data-table table-responsive">
+				<table class="data-table table-responsive remove-border">
 	
 					<thead>
 						<tr>
@@ -99,8 +101,12 @@
 								<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
 								<td><%= task.name %></td>
 								<td class="center">
-									<a class="pointer hidden-sm" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
-									<a class="pointer visible-sm-*" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="left">
+									
+									<a class="pointer hidden-sm hidden-xs" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
+										<i class="fa fa-pencil-square-o gray"></i>
+									</a>
+									
+									<a class="pointer hidden-md hidden-lg" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="left">
 										<i class="fa fa-pencil-square-o gray"></i>
 									</a>
 									
@@ -132,7 +138,7 @@
 			
 			<!-- Completed Tasks Table -->
 			<div id="table-wrapper-s">
-				<table class="data-table">
+				<table class="data-table table-responsive remove-border">
 	
 					<thead>
 						<tr>
@@ -170,7 +176,7 @@
 		<!------------------------------- Right Third ------------------------------->
 		
 		<div class="col-md-1">
-			<div class="control-group display-table width-full remove-margin">
+			<div class="control-group remove-margin">
 			
 				<!-- Add Task Button -->
 				<div>
@@ -378,7 +384,7 @@
 	$(document).ready(function(){
 	    $('[data-toggle="tooltip"]').tooltip({
 	        placement : 'auto top',
-	        delay : { show: 2000, hide: 500 },
+	        delay : { show: 500, hide: 1000 },
 	    });
 	});
 </script>

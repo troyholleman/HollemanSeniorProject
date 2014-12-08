@@ -4,8 +4,10 @@ class Task < ActiveRecord::Base
   
   validates :name, presence: true, length: { maximum: 40 }
   validates :category_id, presence: true
-  # FIX THIS
-  validates :priority, presence: true, inclusion: 1..10
+  
+  validates :priority, presence: true
+  validates :priority, inclusion: { in: 1..3, message: "must be between 1-3" }
+  
   validates :comment, length: { maximum: 20 }
   
   

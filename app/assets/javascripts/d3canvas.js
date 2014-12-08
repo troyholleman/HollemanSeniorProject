@@ -7,6 +7,8 @@
 	var categories = gon.categories;
 	//var cat_tasks = gon.cat_tasks;
 	
+	var events = "touch release hold tap doubletap dragstart drag dragend dragleft dragright dragup dragdown swipe swipeleft swiperight swipeup swipedown transformstart transform transformend rotate rotateleft rotateright pinch pinchin pinchout";
+	
 	var width = $("#graph").width(),
 			height = 550,
 			
@@ -92,11 +94,25 @@
 		}
 	};
 	
+	var priorityToText = function (task) {
+		switch (task.priority) {
+  		case 1:
+  			return "High";
+  			break;
+			case 2:
+				return "Medium";
+				break;
+			case 3:
+				return "Low";
+				break;
+		};
+	};
+	
 	// ---------------- D3 Canvas ---------------- //
 	
 	var canvasSVG = d3.select("#graph").append("svg")
-		.attr("preserveAspectRatio", "xMidYMid")
-	  .attr("viewBox", "0 0 800 500")
+		.attr("preserveAspectRatio", "xMidYMid meet")
+	  .attr("viewBox", "0 0 " + width + " " + height)
 		.attr("width", width)
 		.attr("height", height);
 	
@@ -123,18 +139,19 @@
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
 			
-	var labels = canvasSVG.selectAll("g.text")
-			.data(categories)
-			.enter()
-			.append("g")
-					.attr("class", "cat")
-					.attr("transform", "translate(" + cx + ", " + (cy + 5) + ")")
-          // .attr("text-anchor", "middle") //center the text on it's origin
-          // .attr("cx", cx)
-          // .attr("cy", cy)
-          // .attr("cx", function (task) { return cx + Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius })
-          // .attr("cy", function (task) { return cy + Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius })
-          .text(function(cat) { return cat.name; });
+	// var labels = canvasSVG.selectAll("g.text")
+			// .data(categories)
+			// .enter()
+			// .append("g")
+				// //.attr("class", "cat")
+				// .attr("transform", "translate(" + cx + ", " + cy + ")")
+        // .attr("text-anchor", "middle") //center the text on it's origin
+        // // .attr("cx", cx)
+        // // .attr("cy", cy)
+        // .attr("font-size", "20px")
+        // //.attr("cx", function (cat) { return cx + Math.cos( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius; })
+        // //.attr("cy", function (cat) { return cy + Math.sin( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius; })
+        // .text(function(cat) { return cat.name; });
 	  
 	var center = canvasSVG.append("circle")
 			.attr("r", radius * 5)
@@ -210,43 +227,103 @@
 			  	// // * task.priority * (taskPosition(task) / 7);
 		  	// })
 		  	// .attr("transform", "translate(" + Math.floor( Math.random() * 10 ) + ", " + Math.floor( Math.random() * 10 ) + ")")
+		  	
+		  	.on("click", function(task) {
+		  		div.style("border-color", getCategory(task).color );
+			   	div.html(
+			    	"<div class='task-info'>" +
+			    	
+				    	"<h5 class='bold'>Your Task:</h5>" +
+				    	"<p>" + task.name + "</p>" +
+				    	
+				    	"<p class='display-inline-block bold'>Priority:</p>" + " " +
+				    	"<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
+				    	"<div class='clearfix'></div>" +
+				    	
+				    	"<p class='display-inline-block bold'>Deadline:</p>" + " " +
+				    	"<p class='display-inline-block'>" + task.deadline + "</p>" +
+				    	"<div class='clearfix'></div>" +
+				    	
+				    	"<p class='bold'>Comments:</p>" + " " +
+				    	"<p>" + task.comment + "</p>" +
+				    	
+			    	"</div>"
+			    	);
+		  	})
+		  	
+		  	.each(function(task) {
+			    // install handlers with hammer
+			    Hammer(this, {
+			      prevent_default: true,
+			      no_mouseevents: true
+			    }).on(events, log_gesture);
+			  });
+		  	
+		  	function log_gesture(event) {
+				  	
+				 	if (event.type == "tap") {
+				 		div.transition()
+					  	.duration(200)
+					  	.style("opacity", 1)
+					  	.style("display", "block")
+					  	.style("left", (event.center.x) + "px")
+							.style("top", (event.center.y - 28) + "px");
+				 	}
+				 	
+				 	if (event.type == "doubletap") {
+				 		div.transition()
+				 			.duration(500)
+				 			.style("opacity", 0)
+				 			.style("display", "none");
+				 	}
+				  
+				  // gesture.text((event.type + "ed").replace(/eed$/, "ed"));
+				  // which.text("box number " + datum.value);
+				  // area.text([
+				    // "d3.datum: " + JSON.stringify(datum),
+				    // "hammer.event: " + event.type,
+				    // "--------------",
+				    // area.text()
+				  // ].join("\n"));
+				}
+		  	
 			
-		  .on("click", function (task) {
-		  	div.transition()
-		      .duration(200)
-		      .style("opacity", 1)
-		      .style("border-color", getCategory(task).color )
-		      .style("display", "block");
-		      
-		    div.html(
-		    	"<div class='task-info'>" +
-		    	
-			    	"<h5 class='bold'>Your Task:</h5>" +
-			    	"<p>" + task.name + "</p>" +
-			    	
-			    	"<p class='display-inline bold'>Priority:</p>" + " " +
-			    	"<p class='display-inline'>" + task.priority + "</p>" +
-			    	"<div class='clearfix'></div>" +
-			    	
-			    	"<p class='display-inline bold'>Deadline:</p>" + " " +
-			    	"<p class='display-inline'>" + task.deadline + "</p>" +
-			    	"<div class='clearfix'></div>" +
-			    	
-			    	"<p class='bold'>Comments:</p>" + " " +
-			    	"<p>" + task.comment + "</p>" +
-			    	
-		    	"</div>"
-		    	)
-					.style("left", (d3.event.pageX) + "px")
-					.style("top", (d3.event.pageY - 28) + "px");
-		   })
+		  // .on("click", function (task) {
+		  	// div.transition()
+		      // .duration(200)
+		      // .style("opacity", 1)
+		      // .style("border-color", getCategory(task).color )
+		      // .style("display", "block");
+// 		      
+		    // div.html(
+		    	// "<div class='task-info'>" +
+// 		    	
+			    	// "<h5 class='bold'>Your Task:</h5>" +
+			    	// "<p>" + task.name + "</p>" +
+// 			    	
+			    	// "<p class='display-inline-block bold'>Priority:</p>" + " " +
+			    	// "<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
+			    	// "<div class='clearfix'></div>" +
+// 			    	
+			    	// "<p class='display-inline-block bold'>Deadline:</p>" + " " +
+			    	// "<p class='display-inline-block'>" + task.deadline + "</p>" +
+			    	// "<div class='clearfix'></div>" +
+// 			    	
+			    	// "<p class='bold'>Comments:</p>" + " " +
+			    	// "<p>" + task.comment + "</p>" +
+// 			    	
+		    	// "</div>"
+		    	// )
+					// .style("left", (d3.event.pageX) + "px")
+					// .style("top", (d3.event.pageY - 28) + "px");
+		   // })
 		   
-		  .on("mouseout", function (task) {
-		    div.transition()
-		     .duration(500)
-		     .style("opacity", 0)
-		     .style("display", "none");
-		  });
+		  // .on("mouseout", function (task) {
+		    // div.transition()
+		     // .duration(500)
+		     // .style("opacity", 0)
+		     // .style("display", "none");
+		  // });
 		  
 	  // var k = 0;
 // 	  

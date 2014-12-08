@@ -51,14 +51,34 @@ div.info-popup {
 .form > div:not(:last-child) {
   margin-bottom: 10%;
 }
+
+.speech-bubble:after {
+   content: "";
+   position: absolute;
+   top: 100%;
+   left: 20px;
+   border-top: 20px solid black;
+   border-top-color: inherit; 
+   border-left: 20px solid transparent;
+   border-right: 20px solid transparent; 
+}
   
 // ----------------- Responsive --------------->
+
+.control-group * {
+  display: inline-block;
+  text-align: center;
+}
 
 @media screen and (min-width: 770px) {
   .control-group {
     border-left: 2px solid #c2c2c2;
     height: 500px;
+    display: table;
+    width: 100%;
   }
+  .control-group > div { display: table-row; }
+  .control-group > div > a { display: table-cell; }
 }
 
 // ----------------- Shapes --------------->
@@ -89,7 +109,7 @@ circle {
 .tooltip-inner {
   max-width: 100% !important;
   background-color: #335F7C !important;
-  padding: 5px;
+  padding: 5px 15px;
 }
   .tooltip.top .tooltip-arrow {
     border-top-color: #335F7C !important;
