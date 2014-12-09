@@ -7,20 +7,16 @@ class DashboardController < ApplicationController
     @current_user = current_user
     @current_user_id = current_user.id
     
-    @categories = @current_user.categories
-    
-    # -- Current Tasks -- #
-    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ? OR deadline IS NULL", false, Date.today).order( :priority, :deadline)
-    
-    # -- Completed & Overdue Tasks -- #
+    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ? OR deadline IS NULL", false, Date.today).order( 'deadline IS NULL, deadline DESC' )
     @completed_tasks = @current_user.tasks.where(complete: true)
     @overdue_tasks = @current_user.tasks.where("complete = ? AND deadline < ?", false, Date.today)
     
+    @categories = @current_user.categories
     @category_options = @categories.map{ |u| [ u.name, u.id ] }
     
     # -- Javascript Variables -- #
-    gon.clear
     
+    gon.clear
     updatePriorities
     
     gon.current_tasks = @current_tasks
@@ -73,6 +69,7 @@ class DashboardController < ApplicationController
           @comment << string << " "
         end
       end
+      
     end
     
     @categories.each do |cat|
@@ -81,7 +78,7 @@ class DashboardController < ApplicationController
       end
     end
     
-    Date.parse @deadline
+    Date.parse @deadline if !@deadline.nil?
     
     # flash[:alert] = @name.rstrip, @priority, @deadline, @comment, @cat_id, @cat_name
     
@@ -90,35 +87,32 @@ class DashboardController < ApplicationController
     @task.complete = false;
     
     if @task.valid?
-      # if @task.deadline === nil
-        # @task.deadline = "none";
-      # end
-      
       @task.save
+      redirect_to root_path
     else
       flash[:alert] = @task.errors.full_messages
+      redirect_to root_path
     end
-    
-    redirect_to root_path
   end
   
   private
   
   def updatePriorities
-    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ? OR deadline IS NULL", false, Date.today).order( :priority, :deadline)
+    @current_tasks = @current_user.tasks.where("complete = ? AND deadline >= ? OR deadline IS NULL", false, Date.today).order( 'deadline IS NULL, deadline ASC' )
     today = Date.parse Time.now.strftime('%d/%m/%Y')
     
     @current_tasks.each do |task|
-      #task.created_at = Date.parse rand(1..6).to_s + "/" + 12.to_s + "/" + "2014"
-      #task.save
+      # task.created_at = Date.parse rand(1..7).to_s + "/" + 12.to_s + "/" + "2014"
+      # task.save
       
       if !task.deadline.nil?
         created_at = Date.parse task.created_at.strftime('%d/%m/%Y')
         deadline = Date.parse task.deadline.strftime('%d/%m/%Y')
         
-        timeline = deadline.mjd - created_at.mjd
+        timeline = (deadline.mjd - created_at.mjd).ceil
         timeline_checkpoint = (timeline.to_f / 3).ceil
         
+        if timeline_checkpoint == 0 then timeline_checkpoint = 1 end
         daysUntil = deadline.mjd - today.mjd
         # daysUntil = deadline.mjd - Date.parse("25/12/2014").mjd
         
@@ -131,6 +125,8 @@ class DashboardController < ApplicationController
         else
           task.priority = 3;
         end
+        
+        task.save
       end
       
     end

@@ -1,21 +1,27 @@
 
 /* ---------------- Global ------------------ */
 
-html { margin: 10px; }
+html {
+	margin: 10px;
+	font-size: 12px;
+}
 
 body {
 	color: #6A6D6B;
 	font-family: 'Roboto', sans-serif;
-	font-size: 14px;
+	font-size: 1.1em;
 }
 
 a {
 	color: #6A6D6B;
 	outline: none !important;
 }
-	a:hover { color: #335F7C !important; }
+	a:hover, a:active { color: #335F7C !important; }
 	
-i { color: inherit !important; }
+i {
+	color: inherit !important;
+	font-size: 14px;
+}
 	
 hr {
   border-color: #c2c2c2;
@@ -106,6 +112,15 @@ hr {
 /* ---------------- Border ------------------ */
 
 .remove-border { border: 0 !important; }
+.remove-border-radius { border-radius: 0 !important; }
+
+/* ---------------- Shadow ------------------ */
+
+.remove-shadow {
+	-webkit-box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	box-shadow: none !important;
+}
 
 /* ---------------- Color ------------------ */
 

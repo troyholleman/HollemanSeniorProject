@@ -8,7 +8,7 @@ class Task < ActiveRecord::Base
   validates :priority, presence: true
   validates :priority, inclusion: { in: 1..3, message: "must be between 1-3" }
   
-  validates :comment, length: { maximum: 20 }
+  validates :comment, length: { maximum: 40 }
   
   
   validate :deadline_cannot_be_in_the_past

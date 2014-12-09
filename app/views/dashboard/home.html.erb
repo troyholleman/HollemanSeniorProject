@@ -7,7 +7,7 @@
 	<div class="row">
 		
 		<div class="col-md-6 display-inline-block-all">
-			<h1>Cortex</h1>
+			<h1 class="blue">Cortex</h1>
 			<p class="light grey h-margin-s x2">expand your memory</p>
 		</div>
 		
@@ -47,14 +47,7 @@
 					
 				<% end %>
 			</div>
-			<!-- <div class="pull-left">
-				<a rel="t" tabindex="0" data-toggle="popover" data-trigger="focus" data-placement="top">
-					<i class="fa fa-question-circle fa-2x"></i>
-				</a>
-				<div class="content hide">
-					<p>Test</p>
-				</div>
-			</div> -->
+			
 			<div class="clearfix"></div>
 			
 			<!-- Task Stats -->
@@ -76,13 +69,14 @@
 				</div>
 			</div>
 			
-			<!-- Current Title / <hr> -->
-			<div class="row">
+			<!-- Display of Task Data -->
+			<%= render partial: 'taskview' %>
+			
+			<!-- <div class="row">
 				<div class="col-md-5"><h4>Current Tasks</h4></div>
 				<div class="col-md-7 remove-padding-l"><hr /></div>
 			</div>
 			
-			<!-- Current Tasks Table -->
 			<div id="table-wrapper-l" style="margin-bottom: 10px;">
 				<table class="data-table table-responsive remove-border">
 	
@@ -124,10 +118,9 @@
 					</tbody>
 	
 				</table>
-			</div>
+			</div> -->
 			
-			<!-- Completed Title / <hr> -->
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-5">
 					<h4>Completed Tasks</h4>
 				</div>
@@ -136,7 +129,6 @@
 				</div>
 			</div>
 			
-			<!-- Completed Tasks Table -->
 			<div id="table-wrapper-s">
 				<table class="data-table table-responsive remove-border">
 	
@@ -163,11 +155,11 @@
 					</tbody>
 	
 				</table>
-			</div>
+			</div> -->
 
 		</div>
 		
-		<!------------------------------- Middle Third ------------------------------->
+		<!------------------------------- SVG Graph ------------------------------->
 		
 		<div class="col-md-7">
 			<div id="graph" class="center"></div>
@@ -181,11 +173,11 @@
 				<!-- Add Task Button -->
 				<div>
 					
-					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs <%= if @categories.length === 0 then "disabled" end %>" data-original-title="Add Task" data-toggle="popover" data-trigger="focus" data-placement="left">
+					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs remove-shadow <%= if @categories.length === 0 then "disabled" end %>" data-original-title="Add Task" data-toggle="popover" data-trigger="focus" data-placement="left">
 						<i class="fa fa-plus fa-2x"></i>
 					</a>
 					
-					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg <%= if @categories.length === 0 then "disabled" end %>" data-original-title="Add Task" data-toggle="popover" data-trigger="focus" data-placement="top">
+					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg remove-shadow <%= if @categories.length === 0 then "disabled" end %>" data-original-title="Add Task" data-toggle="popover" data-trigger="focus" data-placement="top">
 						<i class="fa fa-plus fa-2x"></i>
 					</a>
 					
@@ -198,11 +190,11 @@
 				
 				<!-- Add Category Button -->
 				<div>
-					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs <%= if @categories.length >= 6 then "disabled" end %>" data-original-title="Add Category" data-toggle="popover" data-trigger="focus" data-placement="left">
+					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs remove-shadow <%= if @categories.length >= 6 then "disabled" end %>" data-original-title="Add Category" data-toggle="popover" data-trigger="focus" data-placement="left">
 						<i class="fa fa-plus-square fa-2x"></i>
 					</a>
 					
-					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg <%= if @categories.length >= 6 then "disabled" end %>" data-original-title="Add Category" data-toggle="popover" data-trigger="focus" data-placement="top">
+					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg remove-shadow <%= if @categories.length >= 6 then "disabled" end %>" data-original-title="Add Category" data-toggle="popover" data-trigger="focus" data-placement="top">
 						<i class="fa fa-plus-square fa-2x"></i>
 					</a>
 	
@@ -215,11 +207,11 @@
 				
 				<!-- Edit Category Button -->
 				<div>
-					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs" data-original-title="Edit Categories" data-toggle="popover" data-trigger="focus" data-placement="left">
+					<a rel="popover" tabindex="0" class="btn hidden-sm hidden-xs remove-shadow" data-original-title="Edit Categories" data-toggle="popover" data-trigger="focus" data-placement="left">
 						<i class="fa fa-folder fa-2x"></i>
 					</a>
 					
-					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg" data-original-title="Edit Categories" data-toggle="popover" data-trigger="focus" data-placement="top">
+					<a rel="popover" tabindex="0" class="btn hidden-md hidden-lg remove-shadow" data-original-title="Edit Categories" data-toggle="popover" data-trigger="focus" data-placement="top">
 						<i class="fa fa-folder fa-2x"></i>
 					</a>
 	
@@ -384,7 +376,8 @@
 	$(document).ready(function(){
 	    $('[data-toggle="tooltip"]').tooltip({
 	        placement : 'auto top',
-	        delay : { show: 500, hide: 1000 },
+	        trigger : 'click hover focus',
+	        delay : { show: 500, hide: 2000 },
 	    });
 	});
 </script>

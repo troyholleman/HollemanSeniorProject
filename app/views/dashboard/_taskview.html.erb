@@ -1,0 +1,186 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  	
+  <!------------------------------- Current Tasks ------------------------------->
+  
+  <div class="panel remove-border-radius remove-shadow panel-default">
+    <div role="tab" id="headingOne">
+    	<div class="row">
+    		<div class="col-md-5">
+    			<h4>
+		        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		          Current Tasks<i class="fa fa-caret-down h-margin-l"></i>
+		        </a>
+		      </h4>
+    		</div>
+    		<div class="col-md-7 remove-padding-l"><hr /></div>
+    	</div>
+    </div>
+    
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body remove-padding">
+      	
+        <div id="table-wrapper">
+					<table class="data-table table-responsive remove-border">
+		
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+		
+						<tbody>
+							<% @current_tasks.each do |task| %>
+								<tr>
+									<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
+									<td><%= task.name %></td>
+									<td><%= if !task.deadline.nil? then task.deadline.strftime('%m/%d/%Y') else "No Deadline" end %></td>
+									<td class="center">
+										
+										<a class="pointer hidden-sm hidden-xs" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
+											<i class="fa fa-pencil-square-o gray"></i>
+										</a>
+										
+										<a class="pointer hidden-md hidden-lg" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="left">
+											<i class="fa fa-pencil-square-o gray"></i>
+										</a>
+										
+										<div class="content hide">
+											<%= form_for task do |f| %>
+												<%= render partial: 'tasks/taskform', :locals => { f: f } %>
+											<% end %>
+										</div>
+									</td>
+									<td class="center">
+										<%= link_to "<i class='fa fa-check green'></i>".html_safe, { controller: "tasks", action: "complete", id: task.id}, method: :post %>
+									</td>
+								</tr>
+							<% end %>
+						</tbody>
+		
+					</table>
+				</div>
+				
+      </div>
+    </div>
+  </div>
+  
+  <!------------------------------- Completed Tasks ------------------------------->
+  
+  <div class="panel remove-border-radius remove-shadow panel-default">
+    <div role="tab" id="headingTwo">
+    	<div class="row">
+    		<div class="col-md-5">
+		      <h4>
+		        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+		          Finished Tasks<i class="fa fa-caret-down h-margin-l"></i>
+		        </a>
+		      </h4>
+      	</div>
+      	<div class="col-md-7 remove-padding-l"><hr /></div>
+      </div>
+    </div>
+    
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body remove-padding">
+      	
+      	<div id="table-wrapper">
+					<table class="data-table table-responsive remove-border">
+		
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+		
+						<tbody>
+							<% @completed_tasks.each do |task| %>
+								<tr>
+									<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
+									<td><%= task.name %></td>
+									<td class="center">
+										<%= link_to "<i class='fa fa-undo gray'></i>".html_safe, { controller: "tasks", action: "complete", id: task.id}, method: :post %>
+									</td>
+									<td class="center"><%= link_to "<i class='fa fa-times red'></i>".html_safe, task_path(task), method: :delete %></td>
+								</tr>
+							<% end %>
+						</tbody>
+		
+					</table>
+				</div>
+      	
+      </div>
+    </div>
+  </div>
+  
+  <!------------------------------- Overdue Tasks ------------------------------->
+  
+  <div class="panel remove-border-radius remove-shadow panel-default">
+    <div role="tab" id="headingThree">
+    	<div class="row">
+    		<div class="col-md-5">
+		      <h4>
+		        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+		          Overdue Tasks<i class="fa fa-caret-down h-margin-l"></i>
+		        </a>
+		      </h4>
+	      </div>
+	      <div class="col-md-7 remove-padding-l"><hr /></div>
+      </div>
+    </div>
+    
+    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body remove-padding">
+        
+        <div id="table-wrapper">
+					<table class="data-table table-responsive remove-border">
+		
+						<thead>
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+		
+						<tbody>
+							<% @overdue_tasks.each do |task| %>
+								<tr>
+									<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
+									<td><%= task.name %></td>
+									<td class="center">
+										
+										<a class="pointer hidden-sm hidden-xs" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
+											<i class="fa fa-pencil-square-o gray"></i>
+										</a>
+										
+										<a class="pointer hidden-md hidden-lg" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="left">
+											<i class="fa fa-pencil-square-o gray"></i>
+										</a>
+										
+										<div class="content hide">
+											<%= form_for task do |f| %>
+												<%= render partial: 'tasks/taskform', :locals => { f: f } %>
+											<% end %>
+										</div>
+									</td>
+									<td class="center"><%= link_to "<i class='fa fa-times red'></i>".html_safe, task_path(task), method: :delete %></td>
+								</tr>
+							<% end %>
+						</tbody>
+		
+					</table>
+				</div>
+        
+      </div>
+    </div>
+  </div>
+  
+</div>

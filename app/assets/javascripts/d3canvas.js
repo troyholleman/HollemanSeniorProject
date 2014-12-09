@@ -1,11 +1,10 @@
 	
-	// ---------------- VARIABLES ---------------- //
+	// -------------------------------- VARIABLES -------------------------------- //
 	
 	var current_tasks = gon.current_tasks;
 	var completed_tasks = gon.completed_tasks;
 	var overdue_tasks = gon.overdue_tasks;
 	var categories = gon.categories;
-	//var cat_tasks = gon.cat_tasks;
 	
 	var events = "touch release hold tap doubletap dragstart drag dragend dragleft dragright dragup dragdown swipe swipeleft swiperight swipeup swipedown transformstart transform transformend rotate rotateleft rotateright pinch pinchin pinchout";
 	
@@ -13,9 +12,9 @@
 			height = 550,
 			
 			radius = 6,
-			radiusAll = 120,
+			radiusAll = 125,
       
-      startAngle = Math.PI * 1.7,
+      startAngle = Math.PI,
       stepAngle = (2 * Math.PI) / categories.length,
       outerRadius = 2 * radiusAll,
       innerRadius = radiusAll / 4;
@@ -23,17 +22,30 @@
       cx = width / 2;
       cy = height / 2;
       
-  // ---------------- HELPER FUNCTIONS ---------------- //
+      if (categories.length == 6)
+      	startAngle *= 1.65;
+    	else if (categories.length == 5)
+      	startAngle *= 1.7;
+      else if (categories.length == 4)
+      	startAngle *= 1.75;
+      else if (categories.length == 3)
+      	startAngle *= 1.8;
+      else if (categories.length == 2)
+      	startAngle *= 1.85;
+      else if (categories.length == 1)
+      	startAngle *= 2;
+      
+  // -------------------------------- HELPER FUNCTIONS -------------------------------- //
 	
-	var daysUntil = function (date) {
-	  var today = new Date();
-	  return Math.floor((date.valueOf() - today.valueOf()) / (1000 * 3600 * 24));
-	};
-	
-	var taskPosition = function (task) {
-	  var diff = daysUntil(new Date(task.deadline));
-	  return diff;
-	   
+	// var daysUntil = function (date) {
+	  // var today = new Date();
+	  // return Math.floor((date.valueOf() - today.valueOf()) / (1000 * 3600 * 24));
+	// };
+// 	
+	// var taskPosition = function (task) {
+	  // var diff = daysUntil(new Date(task.deadline));
+	  // return diff;
+// 	   
 	  // switch (task.priority) {
 	    // case 1:
 	      // return [300 - (diff * 3), 100];
@@ -45,18 +57,18 @@
 	      // return [300 - (diff * 3), 200];
 	      // break;
 	  // };
-	};
+	// };
 	
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
-				return 1.5 * outerRadius / 3;
+				return 1.4 * outerRadius / 3;
 				break;
 			case 2:
 				return 1.5 * outerRadius / 1.5;
 				break;
 			case 3:
-				return 1.5 * outerRadius;
+				return 1.6 * outerRadius;
 				break;
 		};
 	};
@@ -108,7 +120,7 @@
 		};
 	};
 	
-	// ---------------- D3 Canvas ---------------- //
+	// -------------------------------- D3 Canvas -------------------------------- //
 	
 	var canvasSVG = d3.select("#graph").append("svg")
 		.attr("preserveAspectRatio", "xMidYMid meet")
@@ -130,7 +142,7 @@
 		.enter()
 		.append("path")
 			.attr("d", arc
-		    .startAngle( function (cat) { return categories.indexOf(cat) * stepAngle; } ) //converting from degs to radians
+		    .startAngle( function (cat) { return categories.indexOf(cat) * stepAngle; } )
 		    .endAngle( function (cat) { return (categories.indexOf(cat) ) * stepAngle; } )
 			)
 			// .attr("stroke", function (cat) { return cat.color; })
@@ -138,20 +150,6 @@
 			.attr("stroke-width", 2)
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
-			
-	// var labels = canvasSVG.selectAll("g.text")
-			// .data(categories)
-			// .enter()
-			// .append("g")
-				// //.attr("class", "cat")
-				// .attr("transform", "translate(" + cx + ", " + cy + ")")
-        // .attr("text-anchor", "middle") //center the text on it's origin
-        // // .attr("cx", cx)
-        // // .attr("cy", cy)
-        // .attr("font-size", "20px")
-        // //.attr("cx", function (cat) { return cx + Math.cos( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius; })
-        // //.attr("cy", function (cat) { return cy + Math.sin( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius; })
-        // .text(function(cat) { return cat.name; });
 	  
 	var center = canvasSVG.append("circle")
 			.attr("r", radius * 5)
@@ -169,177 +167,92 @@
 	var force = d3.layout.force()
     .nodes(current_tasks)
     .size([width, height])
-    .gravity(0.4)
+    .gravity(0.5)
     .friction(0.5)
-    //.charge(-60)
-    //.theta(0.5)
-    //.alpha(0.5)
+    .charge(-125)
+    .chargeDistance(-125)
+    //.linkStrength(10)
+    .theta(0)
     .start();
   
   force.on("tick", function (e) {
 	  canvasSVG.selectAll("circle.task")
-      // .attr("cx", function(d) { return d.x; })
-      // .attr("cy", function(d) { return d.y; });
       .attr("cx", function (task) {
-		  	return task.x +
-		  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-		  	Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
-		  	// * task.priority * (taskPosition(task) / 7);
+		  	return task.x + Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
 	  	})
 		  .attr("cy", function (task) {
-		  	return task.y + 
-		  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-		  	Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
-		  	// * task.priority * (taskPosition(task) / 7);
+		  	return task.y + Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
 	  	});
 	});
-	 
-	// var cat = canvasSVG.append('g')
-		// .data(categories)
-		// .attr('cx', function(d, i) { return (width / 2) + Math.cos(startAngle + stepAngle * i) * outerRadius; })
-		// .attr('cy', function(d, i) { return (height / 2) + Math.cos(startAngle + stepAngle * i) * outerRadius; });
-	
-	// function drawCircles(data) {
 		
-		var circles = canvasSVG.selectAll("circle.task")
-	  	.data(current_tasks);
-	  	
-	  	circles.enter().append("circle")
-	  		.attr("class", "task")
-			  .style("fill", function (task) { return fillColor(task); })
-		  	.style("stroke", function (task) { return getCategory(task).color; })
-			  
-			  .attr("r", radius)
-			  .call(force.drag)
-			  // .attr("cx", function (task) { return task.x; })
-			  // .attr("cy", function (task) { return task.y; })
-				  
-			  // .attr("cx", function (task) {
-			  	// return cx +
-			  	// // Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	// Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
-			  	// // * task.priority * (taskPosition(task) / 7);
-		  	// })
-			  // .attr("cy", function (task) {
-			  	// return cy + 
-			  	// // Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * outerRadius *
-			  	// Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
-			  	// // * task.priority * (taskPosition(task) / 7);
-		  	// })
-		  	// .attr("transform", "translate(" + Math.floor( Math.random() * 10 ) + ", " + Math.floor( Math.random() * 10 ) + ")")
-		  	
-		  	.on("click", function(task) {
-		  		div.style("border-color", getCategory(task).color );
-			   	div.html(
-			    	"<div class='task-info'>" +
-			    	
-				    	"<h5 class='bold'>Your Task:</h5>" +
-				    	"<p>" + task.name + "</p>" +
-				    	
-				    	"<p class='display-inline-block bold'>Priority:</p>" + " " +
-				    	"<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
-				    	"<div class='clearfix'></div>" +
-				    	
-				    	"<p class='display-inline-block bold'>Deadline:</p>" + " " +
-				    	"<p class='display-inline-block'>" + task.deadline + "</p>" +
-				    	"<div class='clearfix'></div>" +
-				    	
-				    	"<p class='bold'>Comments:</p>" + " " +
-				    	"<p>" + task.comment + "</p>" +
-				    	
-			    	"</div>"
-			    	);
-		  	})
-		  	
-		  	.each(function(task) {
-			    // install handlers with hammer
-			    Hammer(this, {
-			      prevent_default: true,
-			      no_mouseevents: true
-			    }).on(events, log_gesture);
-			  });
-		  	
-		  	function log_gesture(event) {
-				  	
-				 	if (event.type == "tap") {
-				 		div.transition()
-					  	.duration(200)
-					  	.style("opacity", 1)
-					  	.style("display", "block")
-					  	.style("left", (event.center.x) + "px")
-							.style("top", (event.center.y - 28) + "px");
-				 	}
-				 	
-				 	if (event.type == "doubletap") {
-				 		div.transition()
-				 			.duration(500)
-				 			.style("opacity", 0)
-				 			.style("display", "none");
-				 	}
-				  
-				  // gesture.text((event.type + "ed").replace(/eed$/, "ed"));
-				  // which.text("box number " + datum.value);
-				  // area.text([
-				    // "d3.datum: " + JSON.stringify(datum),
-				    // "hammer.event: " + event.type,
-				    // "--------------",
-				    // area.text()
-				  // ].join("\n"));
-				}
-		  	
-			
-		  // .on("click", function (task) {
-		  	// div.transition()
-		      // .duration(200)
-		      // .style("opacity", 1)
-		      // .style("border-color", getCategory(task).color )
-		      // .style("display", "block");
-// 		      
-		    // div.html(
-		    	// "<div class='task-info'>" +
-// 		    	
-			    	// "<h5 class='bold'>Your Task:</h5>" +
-			    	// "<p>" + task.name + "</p>" +
-// 			    	
-			    	// "<p class='display-inline-block bold'>Priority:</p>" + " " +
-			    	// "<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
-			    	// "<div class='clearfix'></div>" +
-// 			    	
-			    	// "<p class='display-inline-block bold'>Deadline:</p>" + " " +
-			    	// "<p class='display-inline-block'>" + task.deadline + "</p>" +
-			    	// "<div class='clearfix'></div>" +
-// 			    	
-			    	// "<p class='bold'>Comments:</p>" + " " +
-			    	// "<p>" + task.comment + "</p>" +
-// 			    	
-		    	// "</div>"
-		    	// )
-					// .style("left", (d3.event.pageX) + "px")
-					// .style("top", (d3.event.pageY - 28) + "px");
-		   // })
-		   
-		  // .on("mouseout", function (task) {
-		    // div.transition()
-		     // .duration(500)
-		     // .style("opacity", 0)
-		     // .style("display", "none");
-		  // });
+	var circles = canvasSVG.selectAll("circle.task")
+  	.data(current_tasks);
+  	
+  	circles.enter().append("circle")
+  		.attr("class", "task")
+		  .style("fill", function (task) { return fillColor(task); })
+	  	.style("stroke", function (task) { return getCategory(task).color; })
 		  
-	  // var k = 0;
-// 	  
-		// while ((force.alpha() > 1e-2) && (k < 100)) {
-		    // force.tick(),
-		    // k = k + 1;
-		// }
-	// }
+		  .attr("r", radius)
+		  .call(force.drag)
+	  	
+	  	.on("click", function(task) {
+	  		div.style("border-color", getCategory(task).color );
+		   	div.html(
+		    	"<div class='task-info'>" +
+		    	
+			    	"<h5 class='bold'>" + task.name + "</h5>" + "<br />" +
+			    	
+			    	"<p class='display-inline-block bold'>Priority:</p>" + " " +
+			    	"<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
+			    	"<div class='clearfix'></div>" +
+			    	
+			    	"<p class='display-inline-block bold'>Deadline:</p>" + " " +
+			    	"<p class='display-inline-block'>" + task.deadline + "</p>" +
+			    	"<div class='clearfix'></div>" + "</br>" +
+			    	
+			    	"<p class='bold'>Comments:</p>" + " " +
+			    	"<p>" + task.comment + "</p>" +
+			    	
+		    	"</div>"
+		    	);
+	  	})
+	  	
+	  	.each(function(task) {
+		    // install handlers with hammer
+		    Hammer(this, {
+		      prevent_default: true,
+		      no_mouseevents: true
+		    }).on(events, log_gesture);
+		  });
+		  
+	// -------------------------------- Hammer.js -------------------------------- //
 	
-// for (var t in cat_tasks) {
-	// console.log(cat_tasks[t]);
-	// drawCircles(cat_tasks[t]);
-// }
+	function log_gesture(event) {
+	 	if (event.type == "tap") {
+	 		div.transition()
+		  	.duration(750)
+		  	.style("opacity", 1)
+		  	.style("display", "table")
+		  	.style("left", (event.center.x) + "px")
+				.style("top", (event.center.y - 28) + "px");
+	 	}
+	}
+	
+	var element = document.getElementById('graph');
+	  var hammertime = Hammer(element).on("doubletap", function(event) {
+	      div.transition()
+		 			.duration(500)
+		 			.style("opacity", 0)
+		 			.style("display", "none");
+	 			
+	 			$('.popover').popover('hide');
+	  });
+	  
+	// -------------------------------- Responsive SVG -------------------------------- //
 
-$(window).resize(function() {
-  var width = $("#graph").width();
-  canvasSVG.attr("width", width);
-  canvasSVG.attr("height", height);
-});
+	$(window).resize(function() {
+	  var width = $("#graph").width();
+	  canvasSVG.attr("width", width);
+	  canvasSVG.attr("height", height);
+	});

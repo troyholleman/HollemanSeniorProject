@@ -6,15 +6,9 @@
 
 span + i { padding-left: 10px; }
 
-#table-wrapper-l {
+#table-wrapper {
   position: relative;
-  max-height: 170px;
-  overflow: auto;
-}
-
-#table-wrapper-s {
-  position: relative;
-  max-height: 95px;
+  max-height: 275px;
   overflow: auto;
 }
 
@@ -24,56 +18,43 @@ table.data-table { width: 100%; }
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 150px;
-    padding: 2%;
-  }
-  table.data-table tr:not(:first-child) {
-    padding: 2%;
-    border-top: 1px dotted #c2c2c2;
+    padding: 3% 2%;
   }
 
 div.info-popup {
   position: absolute;
   text-align: center;
-  padding: 10px;
   font: 12px sans-serif;
   background-color: white;
   border-width: 2px;
   border-style: solid;
   color: #5c5c5c;
   border-radius: 50%;
-  width: 200px;
-  height: 200px;
+  line-height: 0.8em;
+  padding: 2%;
+  min-width: 200px;
+  min-height: 200px;
 }
 
-.task-info { padding: 10px 10px 0 10px; }
+.task-info {
+  display: table-cell;
+  vertical-align: middle;
+}
   .task-info p { word-wrap: break-word; }
   
 .form > div:not(:last-child) {
   margin-bottom: 10%;
 }
-
-.speech-bubble:after {
-   content: "";
-   position: absolute;
-   top: 100%;
-   left: 20px;
-   border-top: 20px solid black;
-   border-top-color: inherit; 
-   border-left: 20px solid transparent;
-   border-right: 20px solid transparent; 
-}
   
 // ----------------- Responsive --------------->
 
-.control-group * {
-  display: inline-block;
-  text-align: center;
-}
+.control-group { text-align: center; }
+.control-group * { display: inline-block; }
 
 @media screen and (min-width: 770px) {
   .control-group {
     border-left: 2px solid #c2c2c2;
-    height: 500px;
+    height: 525px;
     display: table;
     width: 100%;
   }
@@ -86,6 +67,7 @@ div.info-popup {
 circle {
   stroke-width: 2px;
   vector-effect:non-scaling-stroke;
+  cursor: pointer;
 }
 
 // ----------------- Overrides --------------->
@@ -114,3 +96,7 @@ circle {
   .tooltip.top .tooltip-arrow {
     border-top-color: #335F7C !important;
   }
+
+.panel-default {
+  border-color: transparent !important;
+}

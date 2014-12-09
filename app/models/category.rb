@@ -6,4 +6,6 @@ class Category < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :name, format: { without: /\s/ }
   
+  validates :color, presence: true
+  
 end
