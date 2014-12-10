@@ -28,7 +28,6 @@
 								<th></th>
 								<th></th>
 								<th></th>
-								<th></th>
 							</tr>
 						</thead>
 		
@@ -36,8 +35,11 @@
 							<% @current_tasks.each do |task| %>
 								<tr>
 									<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
-									<td><%= task.name %></td>
-									<td><%= if !task.deadline.nil? then task.deadline.strftime('%m/%d/%Y') else "No Deadline" end %></td>
+									<td>
+										<span class="medium"><%= task.name %></span>&nbsp;<span class="x1-2">(<%= if !task.deadline.nil? then task.deadline.strftime('%m/%d/%Y') end%>)</span>
+										<br />
+										<span class="x1-2"><%= if task.comment != "" then task.comment end%></span>
+									</td>
 									<td class="center">
 										
 										<a class="pointer hidden-sm hidden-xs" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">

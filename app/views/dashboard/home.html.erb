@@ -4,45 +4,43 @@
 	
 	<!------------------------------- LOGIN HEADER ROW ------------------------------->
 	
-	<div class="row">
+	<div class="v-margin-s display-t remove-float-all width-full">
 		
-		<div class="col-md-6 display-inline-block-all">
-			<h1 class="blue">Cortex</h1>
-			<p class="light grey h-margin-s x2">expand your memory</p>
+		<div class="display-tc vertical-align display-ib-all align-left remove-margin-all">
+			<h1 class="blue">*Engram</h1>
+			<p class="light grey h-padding-s x2">upgrade your memory.</p>
 		</div>
 		
-		<div class="col-md-6">
-			<div class="pull-right">
-				<% if user_signed_in? %>
-					Logged in as <strong><%= current_user.email %></strong>
-					<%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'  %> |
-					<%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
-				<% else %>
-					<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
-					<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
-				<% end %>
-			</div>
+		<div class="display-tc vertical-align align-right">
+			<% if user_signed_in? %>
+				Logged in as <strong><%= current_user.email %></strong>
+				<%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link'  %> |
+				<%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+			<% else %>
+				<%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+				<%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+			<% end %>
 		</div>
 		
 	</div>
 
 	<!------------------------------- BODY ROW ------------------------------->
 	
-	<div class="row v-margin-s">
+	<div class="row">
 		
-		<!------------------------------- Left Third ------------------------------->
+		<!------------------------------- Task Input, Stats, and Data ------------------------------->
 		
 		<div class="col-md-4">
 			
-			<div class="display-table width-full">
+			<div class="make-table width-full">
 				<%= form_for :input, url: { action: "parseInput", controller: "dashboard" } do |f| %>
 				
-					<div class="width-90" data-toggle="tooltip" data-original-title="task name &nbsp; #category &nbsp; $priority &nbsp; :deadline &nbsp; +comments">
+					<div class="width-90" data-toggle="tooltip" data-original-title="name &nbsp; #category &nbsp; $priority &nbsp; :deadline &nbsp; +comments">
 						<%= f.text_field :hash, autocomplete: :off, placeholder: 'Quick Add Task', class: 'form-control pull-left' %>
 					</div>
 					
 					<%= button_tag(type: 'submit', class: 'btn btn-default remove-border remove-padding-r remove-padding-l pull-right') do %>
-						<i class="fa fa-chevron-right x3 grey"></i>
+						<i class="fa fa-chevron-right x3 blue"></i>
 					<% end %>
 					
 				<% end %>
@@ -51,7 +49,7 @@
 			<div class="clearfix"></div>
 			
 			<!-- Task Stats -->
-			<div class="row v-margin-l center">
+			<div class="row v-margin-l align-center">
 				<div class="col-md-3">
 					<h4><%= @current_tasks.length %> Tasks</h4>
 				</div>
@@ -162,10 +160,10 @@
 		<!------------------------------- SVG Graph ------------------------------->
 		
 		<div class="col-md-7">
-			<div id="graph" class="center"></div>
+			<div id="graph" class="align-center"></div>
 		</div>
 		
-		<!------------------------------- Right Third ------------------------------->
+		<!------------------------------- Right Button Bar ------------------------------->
 		
 		<div class="col-md-1">
 			<div class="control-group remove-margin">
@@ -232,7 +230,7 @@
 									<td><div class="circle" style="background-color: <%= category.color %>;"></div></td>
 									<td><%= category.name %></td>
 									<td>
-										<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="left">
+										<a rel="popover" tabindex="0" class="btn" data-original-title="Edit Category" data-trigger="focus" data-placement="left">
 											<i class="fa fa-pencil-square-o"></i>
 										</a>
 										
@@ -243,7 +241,7 @@
 										</div>
 									</td>
 									
-									<td class="center">
+									<td class="align-center">
 										<%= link_to "<i class='fa fa-times'></i>".html_safe, category_path(category), method: :delete %>
 									</td>
 			

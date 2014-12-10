@@ -10,30 +10,18 @@
 	
 	var width = $("#graph").width(),
 			height = 550,
+			length = categories.length,
 			
 			radius = 6,
 			radiusAll = 125,
       
       startAngle = Math.PI,
-      stepAngle = (2 * Math.PI) / categories.length,
+      stepAngle = (2 * Math.PI) / length,
       outerRadius = 2 * radiusAll,
       innerRadius = radiusAll / 4;
       
       cx = width / 2;
       cy = height / 2;
-      
-      if (categories.length == 6)
-      	startAngle *= 1.65;
-    	else if (categories.length == 5)
-      	startAngle *= 1.7;
-      else if (categories.length == 4)
-      	startAngle *= 1.75;
-      else if (categories.length == 3)
-      	startAngle *= 1.8;
-      else if (categories.length == 2)
-      	startAngle *= 1.85;
-      else if (categories.length == 1)
-      	startAngle *= 2;
       
   // -------------------------------- HELPER FUNCTIONS -------------------------------- //
 	
@@ -59,6 +47,14 @@
 	  // };
 	// };
 	
+	if (length == 6) startAngle *= 1.65;
+	else if (length == 5) startAngle *= 1.7;
+  else if (length == 4) startAngle *= 1.75;
+  else if (length == 3) startAngle *= 1.8;
+  else if (length == 2) startAngle *= 1.85;
+  else if (length == 1) startAngle *= 1.9;
+  else startAngle *= 2;
+	
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
@@ -68,7 +64,7 @@
 				return 1.5 * outerRadius / 1.5;
 				break;
 			case 3:
-				return 1.6 * outerRadius;
+				return 1.5 * outerRadius;
 				break;
 		};
 	};
@@ -82,7 +78,7 @@
 				return toRgba(getCategory(task).color, 30);
 				break;
 			case 3:
-				return toRgba(getCategory(task).color, 0);
+				return 'rgba(' + 255 + ',' + 255 + ',' + 255 + ',' + .6 + ')';
 				break;
 		};
 	};
@@ -92,9 +88,8 @@
 		r = parseInt(hex.substring(0, 2), 16);
 		g = parseInt(hex.substring(2, 4), 16);
 		b = parseInt(hex.substring(4, 6), 16);
-	
-		result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
-		return result;
+		 
+		return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity / 100 + ')';
 	};
 	
 	var getCategory = function (task) {
@@ -138,8 +133,7 @@
 		.outerRadius(outerRadius);
 	  
 	var arcs = canvasSVG.selectAll("path")
-		.data(categories)
-		.enter()
+		.data(categories).enter()
 		.append("path")
 			.attr("d", arc
 		    .startAngle( function (cat) { return categories.indexOf(cat) * stepAngle; } )
@@ -147,14 +141,29 @@
 			)
 			// .attr("stroke", function (cat) { return cat.color; })
 			.attr("stroke", "#c2c2c2")
-			.attr("stroke-width", 2)
+			.attr("stroke-width", 3)
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
+			
+	var arcLabels = canvasSVG.selectAll("g.text")
+			.data(categories).enter()
+			.append("g")
+				.append("text")
+				.attr("text-anchor", "middle")
+				.attr("class", "medium x2")
+				.attr("fill", "#5c5c5c")
+			  .attr("x", function (cat) {
+			  	return cx + Math.cos( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius;
+		  	})
+		  	.attr("y", function (cat) {
+			  	return cy + Math.sin( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius;
+		  	})
+			  .text( function (cat) { return cat.name.toUpperCase(); } );
 	  
 	var center = canvasSVG.append("circle")
 			.attr("r", radius * 5)
 			.attr("stroke", "#c2c2c2")
-			.attr("stroke-width", 2)
+			.attr("stroke-width", 3)
 			.attr("fill", "none")
 			.attr("transform", "translate(" + cx + ", " + cy + ")");
 		
@@ -169,21 +178,21 @@
     .size([width, height])
     .gravity(0.5)
     .friction(0.5)
-    .charge(-125)
-    .chargeDistance(-125)
+    .charge(-150)
+    .chargeDistance(-150)
     //.linkStrength(10)
     .theta(0)
-    .start();
+    .start()
   
-  force.on("tick", function (e) {
-	  canvasSVG.selectAll("circle.task")
-      .attr("cx", function (task) {
-		  	return task.x + Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
-	  	})
-		  .attr("cy", function (task) {
-		  	return task.y + Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
-	  	});
-	});
+	  .on("tick", function (e) {
+		  canvasSVG.selectAll("circle.task")
+	      .attr("cx", function (task) {
+			  	return task.x + Math.cos( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task); 	
+		  	})
+			  .attr("cy", function (task) {
+			  	return task.y + Math.sin( startAngle + stepAngle * categories.indexOf(getCategory(task)) ) * taskPriority(task);
+		  	});
+		});
 		
 	var circles = canvasSVG.selectAll("circle.task")
   	.data(current_tasks);
@@ -203,12 +212,12 @@
 		    	
 			    	"<h5 class='bold'>" + task.name + "</h5>" + "<br />" +
 			    	
-			    	"<p class='display-inline-block bold'>Priority:</p>" + " " +
-			    	"<p class='display-inline-block'>" + priorityToText(task) + "</p>" +
+			    	"<p class='display-ib bold'>Priority:</p>" + " " +
+			    	"<p class='display-ib'>" + priorityToText(task) + "</p>" +
 			    	"<div class='clearfix'></div>" +
 			    	
-			    	"<p class='display-inline-block bold'>Deadline:</p>" + " " +
-			    	"<p class='display-inline-block'>" + task.deadline + "</p>" +
+			    	"<p class='display-ib bold'>Deadline:</p>" + " " +
+			    	"<p class='display-ib'>" + task.deadline + "</p>" +
 			    	"<div class='clearfix'></div>" + "</br>" +
 			    	
 			    	"<p class='bold'>Comments:</p>" + " " +
@@ -218,17 +227,16 @@
 		    	);
 	  	})
 	  	
-	  	.each(function(task) {
-		    // install handlers with hammer
+	  	.each(function(d, i) {
 		    Hammer(this, {
 		      prevent_default: true,
 		      no_mouseevents: true
-		    }).on(events, log_gesture);
+		    }).on(events, popup);
 		  });
 		  
 	// -------------------------------- Hammer.js -------------------------------- //
 	
-	function log_gesture(event) {
+	function popup(event) {
 	 	if (event.type == "tap") {
 	 		div.transition()
 		  	.duration(750)
@@ -239,15 +247,15 @@
 	 	}
 	}
 	
-	var element = document.getElementById('graph');
-	  var hammertime = Hammer(element).on("doubletap", function(event) {
-	      div.transition()
-		 			.duration(500)
-		 			.style("opacity", 0)
-		 			.style("display", "none");
-	 			
-	 			$('.popover').popover('hide');
-	  });
+  var resetPopups = Hammer(document.getElementById('graph') )
+	  .on("doubletap", function(event) {
+      div.transition()
+	 			.duration(500)
+	 			.style("opacity", 0)
+	 			.style("display", "none");
+ 			
+ 			$('.popover').popover('hide');
+		});
 	  
 	// -------------------------------- Responsive SVG -------------------------------- //
 

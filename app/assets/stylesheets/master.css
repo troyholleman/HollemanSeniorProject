@@ -16,7 +16,10 @@ a {
 	color: #6A6D6B;
 	outline: none !important;
 }
-	a:hover, a:active { color: #335F7C !important; }
+	a:hover, a:active {
+		color: #335F7C !important;
+		text-decoration: none;
+	}
 	
 i {
 	color: inherit !important;
@@ -30,16 +33,18 @@ hr {
 
 /* ---------------- Alignment ------------------ */
 
-.display-inline-block { display: inline-block; }
-	.display-inline-block-all * { display: inline-block; }
+.make-table { display: table; }
+	.make-table > div { display: table-row; }
 
-.display-table { display: table; }
-	.display-table > div { display: table-row; }
-	.display-table > div > a { display: table-cell; }
-.display-table-row { display: table-row; }
-.display-table-cell { display: table-cell; }
+.display-ib { display: inline-block; }
+	.display-ib-all * { display: inline-block; }
+
+.display-t { display: table; }
+.display-tr { display: table-row; }
+.display-tc { display: table-cell; }
 
 .vertical-align { vertical-align: middle; }
+.vertical-align-bottom { vertical-align: bottom; }
 
 /* ---------------- Positioning ------------------ */
 
@@ -47,6 +52,9 @@ hr {
 	.position-relative-all * { position: relative; }
 	
 .position-absolute { position: absolute; }
+
+.remove-float { float: none !important; }
+	.remove-float-all * { float: none !important; }
 
 /* ---------------- Sizing ------------------ */
 
@@ -87,6 +95,7 @@ hr {
 .remove-margin { margin: 0 !important; }
 .remove-margin-l { margin-left: 0 !important; }
 .remove-margin-r { margin-right: 0 !important; }
+	.remove-margin-all * { margin: 0 !important; }
 
 .center-margin { margin: 0 auto; }
 
@@ -131,14 +140,16 @@ hr {
 
 /* ---------------- Font ------------------ */
 
-.left { text-align: left; }
-.center { text-align: center; }
+.align-left { text-align: left; }
+.align-right { text-align: right; }
+.align-center { text-align: center; }
 
 .light, .light * { font-weight: 300 !important; }
 .normal, .normal * { font-weight: 400 !important; }
 .medium, .medium * { font-weight: 500 !important; }
 .bold, .bold * { font-weight: 700 !important; }
 
+.x1-2 { font-size: 0.8em; }
 .x2 { font-size: 1.2em; }
 .x3 { font-size: 1.4em; }
 .x4 { font-size: 1.6em; }
