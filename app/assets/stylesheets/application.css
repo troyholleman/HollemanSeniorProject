@@ -12,7 +12,8 @@
  *
  *= require bootstrap-colorpicker 
  *= require bootstrap
+ *= require dashboard
+ *= require master
  * 
  *= require_tree .
- *= require_self
  */
