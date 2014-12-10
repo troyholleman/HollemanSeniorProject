@@ -14,8 +14,6 @@
 //= require jquery_ujs
 //= require turbolinks
 //
-//= require_self
-//
 //= require bootstrap-colorpicker
 //= require bootstrap
 //= require d3
