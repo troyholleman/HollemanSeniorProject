@@ -29,18 +29,20 @@ gem 'spring',        group: :development
 
 # --------------------------------------
 
-gem 'devise'
+gem 'devise', '~> 3.4.1'
 gem 'd3js-rails', '~> 3.1.6'
 gem 'hirb'
 gem 'gon'
 gem 'bootstrap-colorpicker-rails'
 
-gem "therubyracer"
-gem "less-rails"
+gem 'sprockets-rails', :require => 'sprockets/railtie'
+
+# gem "therubyracer"
+# gem "less-rails"
 
 group :production do
   gem 'pg', '~> 0.17.1'
-  gem 'rails_12factor', '~> 0.0.3'
+  gem 'rails_12factor'
 end
 
 group :development do
