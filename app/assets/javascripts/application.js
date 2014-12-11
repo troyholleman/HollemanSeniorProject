@@ -10,14 +10,13 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//
+//= require bootstrap-colorpicker
+//= require bootstrap
+//= require hammer
+//= require d3
+//= require d3canvas
+//
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//
-//= require d3
-//= require hammer
-//= require bootstrap
-//= require bootstrap-colorpicker
-//= require d3canvas
-//
-//
