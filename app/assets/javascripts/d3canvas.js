@@ -1,5 +1,4 @@
 	
-	// -------------------------------- VARIABLES -------------------------------- //
 	
 	var current_tasks = gon.current_tasks;
 	var completed_tasks = gon.completed_tasks;
@@ -58,13 +57,13 @@
 	var taskPriority = function (task) {
 		switch (task.priority) {
 			case 1:
-				return 1.4 * outerRadius / 3;
+				return outerRadius / 3;
 				break;
 			case 2:
-				return 1.5 * outerRadius / 1.5;
+				return outerRadius / 1.5;
 				break;
 			case 3:
-				return 1.5 * outerRadius;
+				return outerRadius;
 				break;
 		};
 	};
@@ -118,7 +117,7 @@
 	// -------------------------------- D3 Canvas -------------------------------- //
 	
 	var canvasSVG = d3.select("#graph").append("svg")
-		.attr("preserveAspectRatio", "xMinYMin")
+		.attr("preserveAspectRatio", "xMidYMin meet")
 	  .attr("viewBox", "0 0 " + width + " " + height)
 		.attr("width", width)
 		.attr("height", height);
@@ -179,7 +178,7 @@
     .gravity(0.6)
     .friction(0.5)
     .charge(-100)
-    .chargeDistance(100)
+    .chargeDistance(75)
     .theta(-1.25)
     .start()
   

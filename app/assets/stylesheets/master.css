@@ -123,8 +123,6 @@ hr {
 .remove-border { border: 0 !important; }
 .remove-border-radius { border-radius: 0 !important; }
 
-tbody.border-b tr { border-bottom: 2px dotted #c2c2c2 !important; }
-
 /* ---------------- Shadow ------------------ */
 
 .remove-shadow {

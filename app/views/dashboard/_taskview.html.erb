@@ -20,7 +20,7 @@
       <div class="panel-body remove-padding">
       	
         <div id="table-wrapper">
-					<table class="data-table table-responsive remove-border border-b">
+					<table class="data-table table-responsive remove-border">
 		
 						<thead>
 							<tr>
@@ -31,7 +31,7 @@
 							</tr>
 						</thead>
 		
-						<tbody>
+						<tbody class="border-b">
 							<% @current_tasks.each do |task| %>
 								<tr>
 									<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
