@@ -75,7 +75,7 @@
   			return getCategory(task).color;
   			break;
 			case 2:
-				return toRgba(getCategory(task).color, 30);
+				return toRgba(getCategory(task).color, 35);
 				break;
 			case 3:
 				return 'rgba(' + 255 + ',' + 255 + ',' + 255 + ',' + .6 + ')';
@@ -118,7 +118,7 @@
 	// -------------------------------- D3 Canvas -------------------------------- //
 	
 	var canvasSVG = d3.select("#graph").append("svg")
-		.attr("preserveAspectRatio", "xMidYMid meet")
+		.attr("preserveAspectRatio", "xMinYMin")
 	  .attr("viewBox", "0 0 " + width + " " + height)
 		.attr("width", width)
 		.attr("height", height);
@@ -150,15 +150,15 @@
 			.append("g")
 				.append("text")
 				.attr("text-anchor", "middle")
-				.attr("class", "medium x2")
-				.attr("fill", "#5c5c5c")
+				.attr("class", "medium")
+				.attr("fill", function (task) { return toRgba('#5c5c5c', 75); })
 			  .attr("x", function (cat) {
 			  	return cx + Math.cos( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius;
 		  	})
 		  	.attr("y", function (cat) {
 			  	return cy + Math.sin( startAngle + stepAngle * categories.indexOf(cat) ) * outerRadius;
 		  	})
-			  .text( function (cat) { return cat.name.toUpperCase(); } );
+			  .text( function (cat) { return cat.name.toUpperCase(); });
 	  
 	var center = canvasSVG.append("circle")
 			.attr("r", radius * 5)
@@ -176,12 +176,11 @@
 	var force = d3.layout.force()
     .nodes(current_tasks)
     .size([width, height])
-    .gravity(0.5)
+    .gravity(0.6)
     .friction(0.5)
-    .charge(-150)
-    .chargeDistance(-150)
-    //.linkStrength(10)
-    .theta(0)
+    .charge(-100)
+    .chargeDistance(100)
+    .theta(-1.25)
     .start()
   
 	  .on("tick", function (e) {
@@ -231,12 +230,12 @@
 		    Hammer(this, {
 		      prevent_default: true,
 		      no_mouseevents: true
-		    }).on(events, popup);
+		    }).on(events, createPopup);
 		  });
 		  
 	// -------------------------------- Hammer.js -------------------------------- //
 	
-	function popup(event) {
+	function createPopup(event) {
 	 	if (event.type == "tap") {
 	 		div.transition()
 		  	.duration(750)

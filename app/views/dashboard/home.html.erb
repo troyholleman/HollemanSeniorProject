@@ -69,91 +69,6 @@
 			
 			<!-- Display of Task Data -->
 			<%= render partial: 'taskview' %>
-			
-			<!-- <div class="row">
-				<div class="col-md-5"><h4>Current Tasks</h4></div>
-				<div class="col-md-7 remove-padding-l"><hr /></div>
-			</div>
-			
-			<div id="table-wrapper-l" style="margin-bottom: 10px;">
-				<table class="data-table table-responsive remove-border">
-	
-					<thead>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-	
-					<tbody>
-						<% @current_tasks.each do |task| %>
-							<tr>
-								<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
-								<td><%= task.name %></td>
-								<td class="center">
-									
-									<a class="pointer hidden-sm hidden-xs" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="right">
-										<i class="fa fa-pencil-square-o gray"></i>
-									</a>
-									
-									<a class="pointer hidden-md hidden-lg" rel="popover" data-original-title="Edit Task" tabindex="0" data-trigger="focus" data-placement="left">
-										<i class="fa fa-pencil-square-o gray"></i>
-									</a>
-									
-									<div class="content hide">
-										<%= form_for task do |f| %>
-											<%= render partial: 'tasks/taskform', :locals => { f: f } %>
-										<% end %>
-									</div>
-								</td>
-								<td class="center">
-									<%= link_to "<i class='fa fa-check green'></i>".html_safe, { controller: "tasks", action: "complete", id: task.id}, method: :post %>
-								</td>
-							</tr>
-						<% end %>
-					</tbody>
-	
-				</table>
-			</div> -->
-			
-			<!-- <div class="row">
-				<div class="col-md-5">
-					<h4>Completed Tasks</h4>
-				</div>
-				<div class="col-md-7 remove-padding-l">
-					<hr />
-				</div>
-			</div>
-			
-			<div id="table-wrapper-s">
-				<table class="data-table table-responsive remove-border">
-	
-					<thead>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-	
-					<tbody>
-						<% @completed_tasks.each do |task| %>
-							<tr>
-								<td><div class="circle center-margin" style="background-color: <%= @categories.find(task.category_id).color %>;"></div></td>
-								<td><%= task.name %></td>
-								<td class="center">
-									<%= link_to "<i class='fa fa-undo gray'></i>".html_safe, { controller: "tasks", action: "complete", id: task.id}, method: :post %>
-								</td>
-								<td class="center"><%= link_to "<i class='fa fa-times red'></i>".html_safe, task_path(task), method: :delete %></td>
-							</tr>
-						<% end %>
-					</tbody>
-	
-				</table>
-			</div> -->
 
 		</div>
 		
@@ -214,7 +129,7 @@
 					</a>
 	
 					<div class="content hide">
-						<table class="data-table" style="width: 200px;">
+						<table class="data-table table-responsive remove-border" style="width: 200px;">
 							<thead>
 								<tr>
 									<th></th>
@@ -267,103 +182,6 @@
 		
 	</div>
 	
-	
-	<!------------------------------- TEST ROW ------------------------------->
-	
-	<!-- <div class="row v-margin-s">
-		
-		<div class="col-md-8">
-			
-			<h3>All Tasks</h3>
-			
-			<table class="data-table width-full">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Priority</th>
-						<th>Deadline</th>
-						<th>Comment</th>
-						<th>Category</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<% @current_tasks.each do |task| %>
-					<tr>
-
-						<td><%= task.name %></td>
-						<td><%= task.priority %></td>
-						<td><%= task.deadline %></td>
-						<td><%= task.comment %></td>
-
-						<td><%= @categories.find(task.category_id).name %></td>
-
-						<td>
-							<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="top">
-								<i class="fa fa-pencil-square-o"></i>
-							</a>
-							
-							<div class="head hide"></div>
-							<div class="content hide">
-								<%= form_for task do |f| %>
-								<%= render partial: 'tasks/taskform', :locals => { f: f } %>
-								<% end %>
-							</div>
-						</td>
-
-						<td class="center">
-							<%= link_to "<i class='fa fa-times'></i>".html_safe, task_path(task), method: :delete %>
-						</td>
-
-					</tr>
-					<% end %>
-				</tbody>
-			</table>
-			
-		</div>
-		
-		<div class="col-md-4">
-			
-			<h3>All Categories</h3>
-			
-			<table class="data-table width-full">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Color</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<% @categories.each do |category| %>
-					<tr>
-						<td><%= category.name %></td>
-						<td><div class="circle" style="background-color: <%= category.color %>;"></div></td>
-						<td>
-							<a rel="popover" tabindex="0" class="btn" data-original-title="popover" data-trigger="focus" data-placement="top">
-								<i class="fa fa-pencil-square-o"></i>
-							</a>
-							
-							<div class="content hide">
-								<%= form_for category do |f| %>
-								<%= render partial: 'categories/catform', :locals => { f: f } %>
-								<% end %>
-							</div>
-						</td>
-						
-						<td class="center">
-							<%= link_to "<i class='fa fa-times'></i>".html_safe, category_path(category), method: :delete %>
-						</td>
-
-					</tr>
-					<% end %>
-				</tbody>
-			</table>
-		</div>
-	</div> -->
-	
 </div>
 
 <!------------ Javascript ------------>
@@ -371,12 +189,22 @@
 <%= javascript_include_tag "application" %>
 
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function() {
+		
 	    $('[data-toggle="tooltip"]').tooltip({
 	        placement : 'auto top',
 	        trigger : 'click hover focus',
 	        delay : { show: 500, hide: 2000 },
 	    });
+	    
+	    $('body').popover({
+				html : true,
+				selector : '[rel=popover]',
+				title : function() { return $(this).parent().find('.head').html(); },
+				content : function() { return $(this).parent().find('.content').html(); },
+				animation : true,
+				container : 'body',
+		});
 	});
 </script>
 

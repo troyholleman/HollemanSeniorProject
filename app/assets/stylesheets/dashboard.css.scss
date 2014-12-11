@@ -32,15 +32,15 @@ div.info-popup {
   border-radius: 50%;
   line-height: 0.8em;
   padding: 2%;
-  min-width: 200px;
-  min-height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
 .task-info {
   display: table-cell;
   vertical-align: middle;
 }
-  .task-info p { word-wrap: break-word; }
+  .task-info * { white-space: normal; }
   
 .form > div:not(:last-child) {
   margin-bottom: 10%;
@@ -54,7 +54,7 @@ div.info-popup {
 @media screen and (min-width: 770px) {
   .control-group {
     border-left: 2px solid #c2c2c2;
-    height: 525px;
+    min-height: 550px;
     display: table;
     width: 100%;
   }

@@ -11,11 +11,11 @@ class CategoriesController < ApplicationController
     
     if @category.valid?
       @category.save
+      redirect_to root_path
     else
       flash[:alert] = @category.errors.full_messages
+      redirect_to root_path
     end
-    
-    redirect_to root_path
   end
   
   def destroy

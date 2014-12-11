@@ -16,11 +16,11 @@ class TasksController < ApplicationController
     
     if @task.valid?
       @task.save
+      redirect_to root_path
     else
       flash[:alert] = @task.errors.full_messages
+      redirect_to root_path
     end
-    
-    redirect_to root_path
   end
   
   def edit
@@ -41,7 +41,6 @@ class TasksController < ApplicationController
   end
   
   def complete
-    
     if @task.complete
       @task.complete = false
     else
@@ -49,12 +48,12 @@ class TasksController < ApplicationController
     end
     
     if @task.save
-      flash[:success] = "Task Saved"
+      flash[:success] = "Task Complete"
+      redirect_to root_path
     else
       flash[:alert] = @task.errors.full_messages
+      redirect_to root_path
     end
-    
-    redirect_to root_path
   end
   
   private

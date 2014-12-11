@@ -7,27 +7,27 @@ html {
 }
 
 body {
-	color: #6A6D6B;
-	font-family: 'Roboto', sans-serif;
+	color: #6A6D6B !important;
+	font-family: 'Roboto', sans-serif !important;
 	font-size: 1.1em;
 }
 
 a {
-	color: #6A6D6B;
+	color: #6A6D6B !important;
 	outline: none !important;
 }
 	a:hover, a:active {
 		color: #335F7C !important;
-		text-decoration: none;
+		text-decoration: none !important;
 	}
 	
 i {
 	color: inherit !important;
-	font-size: 14px;
+	font-size: 1.2em;
 }
 	
 hr {
-  border-color: #c2c2c2;
+  border-color: #c2c2c2 !important;
   border-width: 2px !important;
 }
 
@@ -73,8 +73,8 @@ hr {
 
 .circle {
 	border-radius: 50%;
-	width: 15px;
-	height: 15px;
+	width: 16px;
+	height: 16px;
 }
 
 /* ---------------- Margin ------------------ */
@@ -123,6 +123,8 @@ hr {
 .remove-border { border: 0 !important; }
 .remove-border-radius { border-radius: 0 !important; }
 
+tbody.border-b tr { border-bottom: 2px dotted #c2c2c2 !important; }
+
 /* ---------------- Shadow ------------------ */
 
 .remove-shadow {
@@ -148,6 +150,10 @@ hr {
 .normal, .normal * { font-weight: 400 !important; }
 .medium, .medium * { font-weight: 500 !important; }
 .bold, .bold * { font-weight: 700 !important; }
+
+.data-table i {
+	font-size: 1.3em;
+}
 
 .x1-2 { font-size: 0.8em; }
 .x2 { font-size: 1.2em; }

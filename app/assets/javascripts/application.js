@@ -14,11 +14,12 @@
 //= require jquery_ujs
 //= require turbolinks
 //
-//= require bootstrap-colorpicker
-//= require bootstrap
 //= require d3
-//= require d3canvas
 //= require hammer
-//= require popover
+//= require bootstrap
+//= require bootstrap-colorpicker
+//
+//= require d3canvas
 //
 //= require_tree .
+//
