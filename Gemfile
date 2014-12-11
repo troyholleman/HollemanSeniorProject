@@ -23,8 +23,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # ------------------ Custom Gems -------------------- >
 
-gem 'devise', '~> 3.4.1'
-gem 'd3js-rails', '~> 3.1.6'
+gem 'devise'
+gem 'd3js-rails'
 gem 'hirb'
 gem 'gon'
 gem 'bootstrap-colorpicker-rails'
@@ -34,13 +34,13 @@ gem 'bootstrap-colorpicker-rails'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 group :production do
-  gem 'pg', '~> 0.17.1'
+  gem 'pg'
   gem 'rails_12factor'
 end
 
 group :development do
   # Use sqlite3 as the database for Active Record
-  gem 'sqlite3', '~> 1.3.10'
+  gem 'sqlite3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
