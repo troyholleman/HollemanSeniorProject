@@ -16,6 +16,9 @@
 //
 //= require bootstrap-colorpicker
 //= require bootstrap
+//= require hammer
 //= require d3canvas
+//= require d3
 //
+//= require_tree .
 //
