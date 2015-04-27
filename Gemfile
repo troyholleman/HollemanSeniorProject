@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.3'
+ruby '2.0.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.6'
@@ -34,7 +34,7 @@ gem 'bootstrap-colorpicker-rails'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 
 group :production do
-  gem 'pg'
+#  gem 'pg'
   gem 'rails_12factor'
 end
 

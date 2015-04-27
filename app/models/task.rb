@@ -10,7 +10,6 @@ class Task < ActiveRecord::Base
   
   validates :comment, length: { maximum: 40 }
   
-  
   validate :deadline_cannot_be_in_the_past
   
   def deadline_cannot_be_in_the_past

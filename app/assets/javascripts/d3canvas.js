@@ -48,11 +48,11 @@
 	
 	if (length == 6) startAngle *= 1.65;
 	else if (length == 5) startAngle *= 1.7;
-  else if (length == 4) startAngle *= 1.75;
-  else if (length == 3) startAngle *= 1.8;
-  else if (length == 2) startAngle *= 1.85;
-  else if (length == 1) startAngle *= 1.9;
-  else startAngle *= 2;
+  	else if (length == 4) startAngle *= 1.75;
+  	else if (length == 3) startAngle *= 1.8;
+  	else if (length == 2) startAngle *= 1.85;
+  	else if (length == 1) startAngle *= 1.9;
+  	else startAngle *= 2;
 	
 	var taskPriority = function (task) {
 		switch (task.priority) {
@@ -176,10 +176,10 @@
     .nodes(current_tasks)
     .size([width, height])
     .gravity(0.6)
-    .friction(0.5)
-    .charge(-100)
-    .chargeDistance(75)
-    .theta(-1.25)
+    .friction(0.2)
+    .charge(-150)
+    .chargeDistance(200)
+    .theta(-1.5)
     .start()
   
 	  .on("tick", function (e) {
