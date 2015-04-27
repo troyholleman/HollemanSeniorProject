@@ -78,7 +78,11 @@ class DashboardController < ApplicationController
       end
     end
     
-    Date.parse @deadline if !@deadline.nil?
+    begin
+      Date.parse @deadline if !@deadline.nil?
+    rescue
+      flash[:alert] = "Invalid Date Format"
+    end
     
     # flash[:alert] = @name.rstrip, @priority, @deadline, @comment, @cat_id, @cat_name
     

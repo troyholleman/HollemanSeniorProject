@@ -28,6 +28,7 @@ gem 'd3js-rails'
 gem 'hirb'
 gem 'gon'
 gem 'bootstrap-colorpicker-rails'
+gem 'validates_timeliness', '~> 3.0'
 
 # gem "therubyracer"
 # gem "less-rails"
